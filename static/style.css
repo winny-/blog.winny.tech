@@ -1,0 +1,11 @@
+div.footpara::before {
+    content: " – ";
+}
+
+.footpara {
+    display: inline;
+}
+
+#archive {
+    padding-top: 10px;
+}

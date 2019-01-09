@@ -1,0 +1,43 @@
+#+title: Toggle Redshift with Keyboard Shortcut
+#+date: <2019-01-09 08:04>
+#+filetags:
+
+Redshift is a screen-tinting program that achieves similar goals to
+the popular f.lux[fn:2] program.
+
+I perused through the redshift man-pages and noticed there is no
+documented way to toggle redshift. Of course one can click the
+notification area icon when using redshift-gtk or =SIGTERM= the
+redshift process, but neither is very user friendly. (The mouse is not
+user friendly.) After some awkward DuckDuckGo-ing and Googling I found
+an obvious solution on the redshift homepage[fn:1]: simply send =SIGUSR1= to
+the redshift or redshift-gtk process. When using redshift-gtk, one can
+choose to send =SIGUSR1= to either redshift or redshift-gtk.
+
+This is the script I came up with:
+
+#+BEGIN_SRC sh
+#!/bin/sh
+set -eu
+if ! pkill -x -SIGUSR1 redshift; then
+    echo 'Could not find redshift process to toggle.' >&2
+    exit 1
+fi
+#+END_SRC
+
+After installing the script into my system's =PATH=, now all I have to
+do is add a line to my Xbindkeys[fn:3] configuration file (=~/.xbindkeysrc.scm=) such as:
+
+#+BEGIN_SRC scheme
+(xbindkey '(Mod4 F2) "toggle-redshift")
+#+END_SRC
+
+Now I can type =Mod4-F2= and toggle Redshift.
+
+* Footnotes
+
+[fn:3] [[http://www.nongnu.org/xbindkeys/xbindkeys.html][XBindKeys homepage]]
+
+[fn:1] [[http://jonls.dk/redshift/#configuration-options][Redshift homepage § Configuration Options]]
+
+[fn:2] [[https://justgetflux.com/][f.lux homepage]]
