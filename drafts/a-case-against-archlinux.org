@@ -1,0 +1,19 @@
+#+TITLE: A Case Against Archlinux
+#+DATE: <2019-01-09 Wed 22:39>
+#+FILETAGS:
+
+Archlinux is a Linux distrobution that emphasizes simplicity, modern
+packages, and flexibilty of configuration. It is a good learning tool
+to understand some of the basics of most Linux systems such as the
+steps of installation, how things are typically configured without the
+aide of GUI helpers, and the woes of inadequate package management. I
+still recommend it as a system to research the basics of modern Linux
+environments, but that is it. In every other situation, Archlinux is
+probably going to cause more problems than it will solve for a given
+use-case.
+
+* pacman
+
+  pacnew and pacsave.
+
+  
