@@ -7,5 +7,33 @@ div.footpara::before {
 }
 
 #archive {
-    padding-top: 10px;
+    text-align: center;
+    padding-top: 1em;
+}
+
+code {
+    font-family: Consolas, monaco, monospace;
+}
+
+body {
+    background: #fffceb;
+    foreground-color: #000;
+    font-family: font-family: georgia, times, serif;
+}
+
+
+#content {
+    max-width: 40em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.org-src-container {
+    background-color: #f6fffe;
+    border-style: solid;
+    border-width: 5px;
+    border-radius: .25rem;
+    padding: 5px;
+    border-color: #cdecff;
+    font-family: Consolas, monaco, monospace;
 }
