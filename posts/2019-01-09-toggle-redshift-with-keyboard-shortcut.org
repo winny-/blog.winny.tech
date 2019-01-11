@@ -1,6 +1,6 @@
 #+title: Toggle Redshift with Keyboard Shortcut
 #+date: <2019-01-09 08:04>
-#+filetags:
+#+filetags: productivity computing
 
 Redshift is a screen-tinting program that achieves similar goals to
 the popular f.lux[fn:2] program.
