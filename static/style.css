@@ -18,7 +18,7 @@ code {
 body {
     background: #fffceb;
     foreground-color: #000;
-    font-family: font-family: georgia, times, serif;
+    font-family: georgia, times, serif;
 }
 
 
@@ -36,4 +36,5 @@ body {
     padding: 5px;
     border-color: #cdecff;
     font-family: Consolas, monaco, monospace;
+    overflow-x: auto;
 }
