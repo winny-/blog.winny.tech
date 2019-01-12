@@ -109,7 +109,7 @@ services:
 #+END_SRC
 
 A keen =docker-compose=-savy reader will notice I did not specify a
-=restart: always= entry. I had Jade configured to always restart,
+=restart: always= entry. I had Caddy configured to always restart,
 however, when requesting new HTTPS certificates from LetsEncrypt, there
 is a tendency to misconfigure the domain configuration or Caddyfile,
 and if Caddy requests too many HTTPS certificates in a short amount of
