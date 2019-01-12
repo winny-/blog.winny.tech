@@ -11,6 +11,10 @@ div.footpara::before {
     padding-top: 2em;
 }
 
+.post-date {
+    padding-top: 1.3em;
+}
+
 code {
     font-family: Consolas, monaco, monospace;
 }

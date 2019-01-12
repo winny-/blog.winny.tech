@@ -1,0 +1,165 @@
+#+title: Publishing with org-static-blog
+#+date: <2019-01-11 16:00>
+#+filetags: computing
+#+options: toc:nil num:nil
+
+* Criteria
+
+After reviewing a list of org-mode[fn:4] capable static website generators[fn:3],
+I decided to see if org-static-blog[fn:1] could suffice my simple
+needs. My criteria for choosing an org-mode static site generator was:
+
+- it must be actively maintained,
+- it must be simple to set up with customizations,
+- and it must work with Emacs 26 and later.
+
+This ruled out quite a few right away. I didn't attempt using
+org-publish, as it looked like a great deal of configuration to
+achieve a minimum viable web-page for this project.
+
+* Configuration of =org-static-blog=
+
+Following the org-static-blog README documentation, it is very
+straight forward to get a minimal viable website generated. I added
+the following to my =init.el=:
+
+#+BEGIN_SRC elisp
+(add-to-list 'auto-mode-alist (cons (concat org-static-blog-posts-directory ".*\\.org\\'") 'org-static-blog-mode))
+(setq org-static-blog-publish-title "blog.winny.tech")
+(setq org-static-blog-publish-url "https://blog.winny.tech/")
+(setq org-static-blog-publish-directory "~/projects/blog/")
+(setq org-static-blog-posts-directory "~/projects/blog/posts/")
+(setq org-static-blog-drafts-directory "~/projects/blog/drafts/")
+(setq org-static-blog-enable-tags t)
+
+(setq org-static-blog-page-header
+      "
+<link href=\"static/style.css\" rel=\"stylesheet\" type=\"text/css\" />
+")
+#+END_SRC
+
+I opted to =setq= all the configuration variables; I will likely
+switch to using =M-x customize-group RET org-static-blog RET= in the
+future however. It's a better experience.
+
+Then I simply create a new post with
+=M-x org-static-blog-create-new-post RET <TITLE> RET=, edit the
+buffer, save it, then run =M-x org-static-blog-publish RET=.
+I also added some styling to my =style.css=[fn:2] based off the Tachyons CSS
+framework[fn:5]. I had previously used Bootstrap[fn:6] for styling but was hoping
+to avoid adding framework and other extra tooling that shouldn't
+be necessary to generate a simple site like this one.
+
+* Deploying with Caddy and GitHub
+
+I am a fan of the Caddy[fn:7] web server which offers automatic HTTPS
+via LetsEncrypt with only a few lines of configuration. In addition
+Caddy has a plugin named git which offers the ability to
+automatically deploy content from git repositories with webhook
+support. To deploy the following steps are taken:
+
+1. =M-x org-static-blog-publish RET= from Emacs to regenerate the
+  static site,
+2. commit the changes in git,
+3. and finally push the git branch to GitHub.
+
+After these steps, GitHub automatically sends a HTTP POST request to my Caddy
+server with information about the new git commits and Caddy pulls the
+git repository. If everything went well and the webhook successfully
+fired, the website is now deployed.
+
+** Server Configuration
+
+I switched most of my personal internet-related services to Docker[fn:8] in
+conjunction with =docker-compose=[fn:9] last year. The main rationale
+is I can move my configuration without dealing with systems package
+versions.  I already had Caddy set up,
+so it was as simple as adding this to my =Caddyfile=:
+
+#+BEGIN_SRC conf
+blog.winny.tech {
+        root /srv/www/blog.winny.tech
+        gzip
+        log /logs/blog.winny.tech.log
+        git https://github.com/winny-/blog.winny.tech {
+                hook /webhook top-secret-password-redacted
+        }
+}
+#+END_SRC
+
+The relevant lines of my =docker-compose.yml= looks like this:
+
+#+BEGIN_SRC yaml
+version: "2.1"
+services:
+  web:
+    image: abiosoft/caddy:no-stats
+    ports:  # Expose the webserver ports to the internet
+      - "80:80"
+      - "443:443"
+    environment:
+      # This is where caddy places certs after ACME negotiation.
+      CADDYPATH: "/etc/caddycerts"
+      ACME_AGREE: "true"
+    volumes:
+      - /srv/caddy/certs:/etc/caddycerts
+      - /srv/caddy/Caddyfile:/etc/Caddyfile  # Configuration
+      - /srv/www:/srv/www  # the websites
+      - /srv/caddy/logs:/logs
+#+END_SRC
+
+A keen =docker-compose=-savy reader will notice I did not specify a
+=restart: always= entry. I had Jade configured to always restart,
+however, when requesting new HTTPS certificates from LetsEncrypt, there
+is a tendency to misconfigure the domain configuration or Caddyfile,
+and if Caddy requests too many HTTPS certificates in a short amount of
+time, LetsEcrypt will rate-limit my future requests. Usually this is
+only requires an hour or two of waiting, but is frustrating to deal
+with when trying to fix my configuration. Instead I rather Caddy
+exit after failing to activate all the domains and fix my
+configuration first.
+
+** GitHub Configuration
+
+Simply create the GitHub repository, then add a webhook. It is
+important to note the webhook /must/ send a JSON payload. By default a
+newly created webhook will send a =application/x-www-form-urlencoded=
+payload and will not work.
+
+* Conclusion
+
+With this simple setup I can write posts. I can easily move the
+configuration to a new host at will. In addition my setup does not
+depend on future use of GitHub as GitLab, Gogs, and other git hosts
+offer webhook support in the same way. Most importantly, I can author
+org-mode files and have a better balance between features and ease of
+use than what markdown offers.
+
+Web dev is one of my least
+favorite programming exercises. Between all the testing necessary to
+ensure a simple site works across many platforms, the trend to use a
+very complex system such as webpack and many other tools to produce
+simple websites, and the perpetual flux-and-flow between vendors only
+partially implementing good features, web dev just doesn't do it for
+me. Hence, I am very pleased how simple this project turned out to
+be.
+
+* Footnotes
+
+[fn:9] [[https://docs.docker.com/compose/overview/][=docker-compose= homepage]]
+
+[fn:8] [[https://docs.docker.com/engine/][Docker Engine homepage]]
+
+[fn:7] [[https://caddyserver.com/][Caddy webserver homepage]]
+
+[fn:6] [[https://getbootstrap.com/][Bootstrap framework homepage]]
+
+[fn:5] [[http://tachyons.io/][Tachyons homepage]]
+
+[fn:4] [[https://orgmode.org/][org-mode homepage]]
+
+[fn:3] [[https://orgmode.org/worg/org-blog-wiki.html][Blogs and Wikis with Org]]
+
+[fn:2] [[file:static/style.css][=static/style.css=]]
+
+[fn:1] [[https://github.com/bastibe/org-static-blog/][org-static-blog on GitHub]]
