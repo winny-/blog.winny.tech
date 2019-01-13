@@ -1,0 +1,12 @@
+#+title: GNU C Style
+#+date: <2019-01-13 12:57>
+#+filetags: computing rant
+
+No. Do not use it please! There are far easier-to-read and easier-to-use styles
+for C![fn:1]
+
+[[file:static/image/gnu-comic.png]]
+
+* Footnotes
+
+[fn:1] [[https://en.wikipedia.org/wiki/Indentation_style][Indentation Style on Wikipedia]]

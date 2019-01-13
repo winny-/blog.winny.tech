@@ -4,7 +4,36 @@
 <title>blog.winny.tech</title>
 <description>blog.winny.tech</description>
 <link>https://blog.winny.tech/</link>
-<lastBuildDate>Sat, 12 Jan 2019 05:06:27 -0600</lastBuildDate>
+<lastBuildDate>Sun, 13 Jan 2019 13:01:34 -0600</lastBuildDate>
+<item>
+  <title>GNU C Style</title>
+  <description><![CDATA[
+<p>
+No. Do not use it please! There are far easier-to-read and easier-to-use styles
+for C!<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</p>
+
+
+<figure>
+<img src="static/image/gnu-comic.png" alt="gnu-comic.png">
+
+</figure>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://en.wikipedia.org/wiki/Indentation_style">Indentation Style on Wikipedia</a>
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computing.html">computing</a> <a href="tag-rant.html">rant</a> </div>]]></description>
+  <category>computing</category>
+  <category>rant</category>
+  <link>https://blog.winny.tech/2019-01-13-gnu-c-style.html</link>
+  <pubDate>Sun, 13 Jan 2019 12:57:00 -0600</pubDate>
+</item>
 <item>
   <title>Publishing with org-static-blog</title>
   <description><![CDATA[
