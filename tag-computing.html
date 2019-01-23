@@ -14,6 +14,212 @@
 <div id="preamble" class="status"></div>
 <div id="content">
 <h1 class="title">Posts tagged "computing":</h1>
+<div class="post-date">22 Jan 2019</div><h1 class="post-title"><a href="2019-01-22-blink-shell-first-thoughts.html">Blink Shell: First Thoughts</a></h1>
+<p>
+As a heavy user of SSH to manage computers and IRC via command line
+clients, the most used application on my phone besides the web browser
+is a SSH client. Previously I have used Prompt and it worked, but
+barely. My issues with Prompt include crashing on emoji spam that is common
+in certain IRC channels, very slow terminal rendering to the point
+that watching the output of compiling a large package will cause
+Prompt to lag uncontrollably for tens of seconds, and a relatively
+un-intuitive UI. Please note I am referring to Prompt, not Prompt 2<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>,
+which is another problem in itself (the idea I need to pay for the
+same product but rewritten to actually work is just ludicrous).
+</p>
+
+
+<figure>
+<img src="static/image/blink-thumb.png" alt="blink-thumb.png">
+
+</figure>
+
+<p>
+Another thing to note before I dig into Blink is I'm not a big fan of
+mobile devices. They get the job done, but in most cases I rather
+crack open my netbook and not fight with the learn-by-fiddling mobile
+UI paradigms most devices have adopted. I am also not a fan of Apple's
+ecosystem, but I'm pretty content with my iPhone and iPad for my
+basic use cases: browse the web, chat applications, making phone
+calls, casual mobile gaming, logging into other computers via SSH.
+</p>
+
+<p>
+Enter Blink<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>. This application does a few things differently from other
+mobile SSH clients. It offers a command-line first user interface. At
+first I thought this would be painful, but the application's verbs are
+pretty simple and appear to match up with how one uses ssh and mosh in
+a terminal emulator. The terminal emulator is responsive,
+significantly more stable than Prompt, and looks good. I can even load
+up my favorite font: Droid Sans Mono<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> (thanks to its support for
+loading webfonts via a URL to a CSS file).
+</p>
+
+<p>
+Another thing Blink does different is it offers
+Mosh support<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>. Mosh is an alternative to SSH that can "roam" across
+networks and device power state changes. One thing to note is Mosh
+requires SSH to make the initial login, then switches to Mosh which
+uses a different protocol. When using mosh, I tend to log in once
+throughout the day. I can then switch networks and mosh will
+gracefully reconnect as soon as the server is reachable again. In
+addition, when I sleep my netbook, the session isn't lost (but don't
+go using this instead of tmux or screen). Instead when I wake my
+netbook, it also gracefully reconnects to the server. The same is true
+of Blink's Mosh support. It even appears to save state between
+changing iOS application states, sans forcing the application to quit
+(or rebooting your device). This means I only log in once on my phone
+throughout the day, and the connection is gracefully dropped when the
+app becomes inactive and reconnects when the app is opened again.
+</p>
+
+<p>
+I did notice I crashed Blink after writing non-ascii binary data to
+the terminal followed by some other operations, but did not manage to
+reproduce the crash yet. If I do, I am confident I can report the bug
+and get meaningful feedback too, as Blink has a bug tracker on
+GitHub<sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup>. The code is available under GPLv3 (but not to worry, as the
+single copyright holder can safely relicense it to deploy on the iOS
+App Store<sup><a id="fnr.6" class="footref" href="#fn.6">6</a></sup>). I could probably build it myself and install that, but I
+neither own a Mac (or wish to install Mac OS X in a VM) nor want to
+ever open XCode again even if I had a way to. That life isn't for me.
+Again, I'm very practical about how I use my iOS devices and don't
+enjoy using them more than I have to, so I'm willing to pay $20 for
+an application I'll use every day of my life on this walled garden
+platform. An added silver lining is this investment
+goes towards the development of such a great app that appears to have
+active maintainership.
+</p>
+
+<p>
+Note: I did not explore some of Blink's features such as using it a
+local iOS shell or settings synchronization. YMMV.
+</p>
+
+<div id="outline-container-orgb0e696d" class="outline-2">
+<h2 id="orgb0e696d">Getting started</h2>
+<div class="outline-text-2" id="text-orgb0e696d">
+<p>
+Here are the steps I used to get started with Blink, as it was
+relatively unclear where to find documentation and which settings
+are necessary to configure. Usage information can be
+found via the <code>help</code> command, the README on GitHub<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup>, and fiddling
+with the UI.
+</p>
+
+<ol class="org-ol">
+<li>Run the <code>config</code> command.
+<ol class="org-ol">
+<li>Default User -&gt; set to your preferred username on most of your servers</li>
+<li>Add a new font via: Appearance -&gt; Add a new font. Open the
+gallery and grab the raw CSS file (you can get a raw URL after
+switching to GitHub desktop), then paste it into the URL
+Address Field. I prefer Droid Sans Mono for its readability at
+all sizes.</li>
+<li><p>
+Keys -&gt; + -&gt; Create New
+</p>
+
+<p>
+Please use ssh keypair authentication. Password authentication
+requires you to memorize a password to log in which can be
+bruteforced or otherwise leaked when typing it in the wrong
+context. Also, be sure to use a unique key on each of your
+devices to make revocation easier when a device is no longer
+used.
+</p>
+
+<p>
+Note: it appears keys are always stored as plaintext,
+which is acceptable for your uses, but it appears <code>ssh-keygen</code>
+can create a key with a passphrase. I wasn't able to get Blink
+to work with Passphrase protected keys, but I didn't try very
+hard. YMMV.
+</p>
+
+<ul class="org-ul">
+<li>Type: RSA</li>
+<li>Bits: 4096 (why not?)</li>
+<li>Name: <code>id_rsa</code></li>
+</ul></li>
+<li>Hosts -&gt; +
+<ul class="org-ul">
+<li>Host: the name you gave your host when running <code>ssh host</code> or
+<code>mosh host</code>. This is not related to the server's hostname,
+though it can be the same. I prefer simple names, usually
+the hostname before the first dot (e.g. <code>worf.winny.tech</code>
+becomes simply <code>worf</code>)</li>
+<li>User: make sure this is correct</li>
+<li>Key: select a key to use.</li>
+</ul></li>
+</ol></li>
+<li>Now you need to install the SSH public key:
+<ol class="org-ol">
+<li>Run <code>config</code> again</li>
+<li>Keys -&gt; <code>id_rsa</code> -&gt; Copy Public Key</li>
+<li><p>
+Install it some way.
+</p>
+
+<p>
+I usually prefer to visit
+<a href="https://ptpb.pw/f">https://ptpb.pw/f</a> and paste the public key, hit Paste, then
+copy the url with the text of "created". You can then <code>curl
+        https://ptpb.pw/PasteId</code> on the server via another login setup
+(or ssh from a set up machine) and add it to your
+<code>~/.ssh/authorized_keys</code>. Make sure that file is mode 0600
+(<code>chmod 0600 ~/.ssh/authorized_keys</code>). Also make sure the
+<code>.ssh</code> directory is 0700 (<code>chmod 0700 ~/.ssh</code>). OpenSSH
+refuses to use <code>authorized_keys</code> if these permissions are world
+readable.
+</p></li>
+</ol></li>
+<li>Run <code>ssh worf</code>. Congratuations, you now have a SSH session on the
+best iOS client available at this time.</li>
+<li>To use mosh, ensure mosh is installed on the server.<sup><a id="fnr.8" class="footref" href="#fn.8">8</a></sup> Then
+run <code>mosh worf</code>.</li>
+</ol>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://www.panic.com/prompt/">Prompt 2 Homepage</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+<a href="http://www.blink.sh/">Blink Shell Homepage</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://www.droidfonts.com/info/droid-sans-mono-fonts/">Droid Sans Mono Homepage</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://mosh.org/">Mosh Homepage</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://github.com/blinksh/blink">Blink on GitHub</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6">6</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://apple.stackexchange.com/a/59495/140932">Ask Different: Is it possible to have GPL software in the Mac App Store?</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7">7</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://github.com/blinksh/blink#using-blink">README § Using Blink</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.8" class="footnum" href="#fnr.8">8</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://mosh.org/#getting">Getting Mosh</a>
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computing.html">computing</a> </div>
 <div class="post-date">13 Jan 2019</div><h1 class="post-title"><a href="2019-01-13-gnu-c-style.html">GNU C Style</a></h1>
 <p>
 No. Do not use it please! There are far easier-to-read and easier-to-use styles
