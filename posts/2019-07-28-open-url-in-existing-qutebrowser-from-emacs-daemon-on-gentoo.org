@@ -1,0 +1,45 @@
+#+title: Open URL in existing Qutebrowser from Emacs Daemon on Gentoo
+#+date: <2019-07-28 03:38>
+#+filetags: emacs productivity computing gentoo qutebrowser
+
+On my Gentoo desktops, I use Emacs Daemon via ==sys-emacs/emacs-daemon==[fn:1]
+to ensure an Emacs instance is ready to go and always available from
+boot. This is done via creating a symbolic link like
+=/etc/init.d/emacs.winston= to =/etc/init.d/emacs= which will start Emacs
+for the given user. See the package README for more details.
+
+A shortcoming of this setup is =XDG_RUNTIME_DIR=[fn:2] is not set, as this is
+set by my Desktop Session - maybe LightDM or consolekit set this? As a
+result, when I open a URL from Emacs Daemon, it opens a fresh
+qutebrowser session, loading the saved default session, and making a
+mess of my workflow.
+
+One approach to fix this might be to instead run Emacs daemon from my
+=.session= script, but I rather not supervise daemons at the user
+level; if I were to consider this, I'd be better off to switch to
+systemd for user-level services anyway.
+
+The solution I came up with is to add some lines to my =init.el= to
+ensure =XDG_RUNTIME_DIR= is set to the expected value:
+
+#+begin_src emacs-lisp
+(defun winny/ensure-XDG_RUNTIME_DIR (&optional dir)
+  "Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."
+  (let ((rd (getenv "XDG_RUNTIME_DIR")))
+    (when (or (not rd) (string-empty-p rd))
+      (setenv "XDG_RUNTIME_DIR" (format "/run/user/%d" (user-uid))))))
+
+(add-hook 'after-init-hook #'winny/ensure-XDG_RUNTIME_DIR)
+#+end_src
+
+A strange emacs-ism: ~(user-uid)~ returns float or integer, despite the
+backing uid_t (on *nix) is guarenteed to be an integer type. I'll just
+assume this'll never return a float. Please contact me otherwise, I'd
+love to hear about this.
+
+* Footnotes
+
+[fn:2] [[https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html][freedesktop.org XDG Base Directory Specification]]
+
+[fn:1] [[https://packages.gentoo.org/packages/app-emacs/emacs-daemon]]
+
