@@ -16,7 +16,7 @@
 <div id="content">
 <div class="post-date">28 Jul 2019</div><h1 class="post-title"><a href="2019-07-28-open-url-in-existing-qutebrowser-from-emacs-daemon-on-gentoo.html">Open URL in existing Qutebrowser from Emacs Daemon on Gentoo</a></h1>
 <p>
-On my Gentoo desktops, I use Emacs Daemon via <code>=sys-emacs/emacs-daemon=</code><sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+On my Gentoo desktops, I use Emacs Daemon via <code>sys-emacs/emacs-daemon</code><sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
 to ensure an Emacs instance is ready to go and always available from
 boot. This is done via creating a symbolic link like
 <code>/etc/init.d/emacs.winston</code> to <code>/etc/init.d/emacs</code> which will start Emacs
@@ -33,7 +33,7 @@ mess of my workflow.
 
 <p>
 One approach to fix this might be to instead run Emacs daemon from my
-<code>.session</code> script, but I rather not supervise daemons at the user
+<code>.xsession</code> script, but I rather not supervise daemons at the user
 level; if I were to consider this, I'd be better off to switch to
 systemd for user-level services anyway.
 </p>
@@ -44,7 +44,7 @@ ensure <code>XDG_RUNTIME_DIR</code> is set to the expected value:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #3a81c3; font-weight: bold;">defun</span> <span style="color: #6c3163; font-weight: bold;">winny/ensure-XDG_RUNTIME_DIR</span> (<span style="color: #ba2f59; font-weight: bold;">&amp;optional</span> dir)
+<pre class="src src-emacs-lisp">(<span style="color: #3a81c3; font-weight: bold;">defun</span> <span style="color: #6c3163; font-weight: bold;">winny/ensure-XDG_RUNTIME_DIR</span> ()
   <span style="color: #da8b55;">"Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."</span>
   (<span style="color: #3a81c3; font-weight: bold;">let</span> ((rd (getenv <span style="color: #2d9574;">"XDG_RUNTIME_DIR"</span>)))
     (<span style="color: #3a81c3; font-weight: bold;">when</span> (<span style="color: #3a81c3; font-weight: bold;">or</span> (not rd) (string-empty-p rd))
