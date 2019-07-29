@@ -4,7 +4,7 @@
 <title>blog.winny.tech</title>
 <description>blog.winny.tech</description>
 <link>https://blog.winny.tech/</link>
-<lastBuildDate>Sun, 28 Jul 2019 04:12:31 -0500</lastBuildDate>
+<lastBuildDate>Mon, 29 Jul 2019 12:09:26 -0500</lastBuildDate>
 <item>
   <title>Open URL in existing Qutebrowser from Emacs Daemon on Gentoo</title>
   <description><![CDATA[
@@ -49,7 +49,7 @@ ensure <code>XDG_RUNTIME_DIR</code> is set to the expected value:
 
 <p>
 A strange emacs-ism: <code>(user-uid)</code> returns float or integer, despite the
-backing uid<sub>t</sub> (on *nix) is guarenteed to be an integer type. I'll just
+backing <code>uid_t</code> (on *nix) is guarenteed to be an integer type. I'll just
 assume this'll never return a float. Please contact me otherwise, I'd
 love to hear about this.
 </p>

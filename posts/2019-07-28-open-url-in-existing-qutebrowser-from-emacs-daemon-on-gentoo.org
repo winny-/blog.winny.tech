@@ -33,7 +33,7 @@ ensure =XDG_RUNTIME_DIR= is set to the expected value:
 #+end_src
 
 A strange emacs-ism: ~(user-uid)~ returns float or integer, despite the
-backing uid_t (on *nix) is guarenteed to be an integer type. I'll just
+backing ~uid_t~ (on *nix) is guarenteed to be an integer type. I'll just
 assume this'll never return a float. Please contact me otherwise, I'd
 love to hear about this.
 
