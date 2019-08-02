@@ -12,6 +12,16 @@
 </head>
 <body>
 <div id="preamble" class="status">
+
+<nav>
+blog.winny.tech :: <ul>
+<li><a href=".">Home</a></li>
+<li><a href="archive.html">Archive</a></li>
+<li><a href="tags.html">Tags</a></li>
+<li><a href="rss.xml">RSS Feed</a></li>
+</ul>
+</nav>
+<hr/>
 </div>
 <div id="content">
 <div class="post-date">09 Jan 2019</div><h1 class="post-title"><a href="2019-01-09-toggle-redshift-with-keyboard-shortcut.html">Toggle Redshift with Keyboard Shortcut</a></h1>
@@ -36,12 +46,12 @@ This is the script I came up with:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #8B8989; font-style: italic;">#</span><span style="color: #8B8989; font-style: italic;">!/bin/</span><span style="color: #4c83ff;">sh</span>
-<span style="color: #4c83ff;">set</span> -eu
-<span style="color: #4c83ff;">if</span> ! pkill -x -SIGUSR1 redshift; <span style="color: #4c83ff;">then</span>
-    <span style="color: #4c83ff;">echo</span> <span style="color: #61CE3C;">'Could not find redshift process to toggle.'</span> &gt;&amp;2
-    <span style="color: #4c83ff;">exit</span> 1
-<span style="color: #4c83ff;">fi</span>
+<pre class="src src-sh"><span style="color: #2aa1ae; background-color: #ecf3ec;">#</span><span style="color: #2aa1ae; background-color: #ecf3ec;">!/bin/</span><span style="color: #3a81c3; font-weight: bold;">sh</span>
+<span style="color: #3a81c3;">set</span> -eu
+<span style="color: #3a81c3; font-weight: bold;">if</span> <span style="color: #4e3163;">!</span> pkill -x -SIGUSR1 redshift; <span style="color: #3a81c3; font-weight: bold;">then</span>
+    <span style="color: #3a81c3;">echo</span> <span style="color: #2d9574;">'Could not find redshift process to toggle.'</span> &gt;&amp;2
+    <span style="color: #3a81c3; font-weight: bold;">exit</span> 1
+<span style="color: #3a81c3; font-weight: bold;">fi</span>
 </pre>
 </div>
 
@@ -51,7 +61,7 @@ do is add a line to my Xbindkeys<sup><a id="fnr.3" class="footref" href="#fn.3">
 </p>
 
 <div class="org-src-container">
-<pre class="src src-scheme">(xbindkey '(Mod4 F2) <span style="color: #61CE3C;">"toggle-redshift"</span>)
+<pre class="src src-scheme">(xbindkey '(Mod4 F2) <span style="color: #2d9574;">"toggle-redshift"</span>)
 </pre>
 </div>
 
@@ -76,7 +86,10 @@ Now I can type <code>Mod4-F2</code> and toggle Redshift.
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-productivity.html">productivity</a> <a href="tag-computing.html">computing</a> </div></div>
-<div id="postamble" class="status"></div>
+</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-productivity.html">productivity</a> <a href="tag-computing.html">computing</a> </div></div>
+<div id="postamble" class="status">
+<hr/>
+<p>Powered by <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a></p>
+</div>
 </body>
 </html>

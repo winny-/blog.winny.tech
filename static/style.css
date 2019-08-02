@@ -45,10 +45,15 @@ body {
     padding-top: 1.3em;
 }
 
-#content {
+#content, #preamble, #postamble {
     max-width: 40em;
     margin-left: auto;
     margin-right: auto;
+}
+
+#postamble {
+    margin-top: 1em;
+    text-align: center;
 }
 
 .org-src-container {
@@ -60,4 +65,25 @@ body {
     border-color: #cdecff;
     font-family: Consolas, monaco, monospace;
     overflow-x: auto;
+}
+
+nav {
+    margin-top: .75em;
+    margin-bottom: .75em;
+
+}
+
+nav ul {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+nav ul, nav ul li {
+    display: inline;
+}
+
+
+nav ul li {
+    padding-right: 0.2em;
+    padding-left: 0.2em;
 }

@@ -12,13 +12,23 @@
 </head>
 <body>
 <div id="preamble" class="status">
+
+<nav>
+blog.winny.tech :: <ul>
+<li><a href=".">Home</a></li>
+<li><a href="archive.html">Archive</a></li>
+<li><a href="tags.html">Tags</a></li>
+<li><a href="rss.xml">RSS Feed</a></li>
+</ul>
+</nav>
+<hr/>
 </div>
 <div id="content">
 <div class="post-date">11 Jan 2019</div><h1 class="post-title"><a href="2019-01-11-publishing-with-org-static-blog.html">Publishing with org-static-blog</a></h1>
 
-<div id="outline-container-org7ef42f9" class="outline-2">
-<h2 id="org7ef42f9">Criteria</h2>
-<div class="outline-text-2" id="text-org7ef42f9">
+<div id="outline-container-org3f4b242" class="outline-2">
+<h2 id="org3f4b242">Criteria</h2>
+<div class="outline-text-2" id="text-org3f4b242">
 <p>
 After reviewing a list of org-mode<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> capable static website generators<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>,
 I decided to see if org-static-blog<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> could suffice my simple
@@ -39,9 +49,9 @@ achieve a minimum viable web-page for this project.
 </div>
 </div>
 
-<div id="outline-container-org696c99d" class="outline-2">
-<h2 id="org696c99d">Configuration of <code>org-static-blog</code></h2>
-<div class="outline-text-2" id="text-org696c99d">
+<div id="outline-container-org09a644e" class="outline-2">
+<h2 id="org09a644e">Configuration of <code>org-static-blog</code></h2>
+<div class="outline-text-2" id="text-org09a644e">
 <p>
 Following the org-static-blog README documentation, it is very
 straight forward to get a minimal viable website generated. I added
@@ -49,18 +59,18 @@ the following to my <code>init.el</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(add-to-list 'auto-mode-alist (cons (concat org-static-blog-posts-directory <span style="color: #61CE3C;">".*\\.org\\'"</span>) 'org-static-blog-mode))
-(<span style="color: #4c83ff;">setq</span> org-static-blog-publish-title <span style="color: #61CE3C;">"blog.winny.tech"</span>)
-(<span style="color: #4c83ff;">setq</span> org-static-blog-publish-url <span style="color: #61CE3C;">"https://blog.winny.tech/"</span>)
-(<span style="color: #4c83ff;">setq</span> org-static-blog-publish-directory <span style="color: #61CE3C;">"~/projects/blog/"</span>)
-(<span style="color: #4c83ff;">setq</span> org-static-blog-posts-directory <span style="color: #61CE3C;">"~/projects/blog/posts/"</span>)
-(<span style="color: #4c83ff;">setq</span> org-static-blog-drafts-directory <span style="color: #61CE3C;">"~/projects/blog/drafts/"</span>)
-(<span style="color: #4c83ff;">setq</span> org-static-blog-enable-tags t)
+<pre class="src src-elisp">(add-to-list 'auto-mode-alist (cons (concat org-static-blog-posts-directory <span style="color: #2d9574;">".*\\.org\\'"</span>) 'org-static-blog-mode))
+(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-publish-title <span style="color: #2d9574;">"blog.winny.tech"</span>)
+(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-publish-url <span style="color: #2d9574;">"https://blog.winny.tech/"</span>)
+(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-publish-directory <span style="color: #2d9574;">"~/projects/blog/"</span>)
+(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-posts-directory <span style="color: #2d9574;">"~/projects/blog/posts/"</span>)
+(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-drafts-directory <span style="color: #2d9574;">"~/projects/blog/drafts/"</span>)
+(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-enable-tags t)
 
-(<span style="color: #4c83ff;">setq</span> org-static-blog-page-header
-      <span style="color: #61CE3C;">"</span>
-<span style="color: #61CE3C;">&lt;link href=\"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
-<span style="color: #61CE3C;">"</span>)
+(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-page-header
+      <span style="color: #2d9574;">"</span>
+<span style="color: #2d9574;">&lt;link href=\"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
+<span style="color: #2d9574;">"</span>)
 </pre>
 </div>
 
@@ -82,9 +92,9 @@ be necessary to generate a simple site like this one.
 </div>
 </div>
 
-<div id="outline-container-org91e4e11" class="outline-2">
-<h2 id="org91e4e11">Deploying with Caddy and GitHub</h2>
-<div class="outline-text-2" id="text-org91e4e11">
+<div id="outline-container-org8fefb4a" class="outline-2">
+<h2 id="org8fefb4a">Deploying with Caddy and GitHub</h2>
+<div class="outline-text-2" id="text-org8fefb4a">
 <p>
 I am a fan of the Caddy<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup> web server which offers automatic HTTPS
 via LetsEncrypt with only a few lines of configuration. In addition
@@ -108,9 +118,9 @@ fired, the website is now deployed.
 </p>
 </div>
 
-<div id="outline-container-orgad3dd03" class="outline-3">
-<h3 id="orgad3dd03">Server Configuration</h3>
-<div class="outline-text-3" id="text-orgad3dd03">
+<div id="outline-container-orgc00d206" class="outline-3">
+<h3 id="orgc00d206">Server Configuration</h3>
+<div class="outline-text-3" id="text-orgc00d206">
 <p>
 I switched most of my personal internet-related services to Docker<sup><a id="fnr.8" class="footref" href="#fn.8">8</a></sup> in
 conjunction with <code>docker-compose</code><sup><a id="fnr.9" class="footref" href="#fn.9">9</a></sup> last year. The main rationale
@@ -120,7 +130,7 @@ so it was as simple as adding this to my <code>Caddyfile</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-conf"><span style="color: #afd8af;">blog.winny.tech</span> {
+<pre class="src src-conf"><span style="color: #ba2f59; font-weight: bold;">blog.winny.tech</span> {
         root /srv/www/blog.winny.tech
         gzip
         log /logs/blog.winny.tech.log
@@ -136,21 +146,21 @@ The relevant lines of my <code>docker-compose.yml</code> looks like this:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-yaml"><span style="color: #ff69b4;">version</span>: <span style="color: #61CE3C;">"2.1"</span>
-<span style="color: #ff69b4;">services</span>:
-  <span style="color: #ff69b4;">web</span>:
-    <span style="color: #ff69b4;">image</span>: abiosoft/caddy:no-stats
-    <span style="color: #ff69b4;">ports</span>:  <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">Expose the webserver ports to the internet</span>
-      - <span style="color: #61CE3C;">"80:80"</span>
-      - <span style="color: #61CE3C;">"443:443"</span>
-    <span style="color: #ff69b4;">environment</span>:
-      <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">This is where caddy places certs after ACME negotiation.</span>
-      <span style="color: #ff69b4;">CADDYPATH</span>: <span style="color: #61CE3C;">"/etc/caddycerts"</span>
-      <span style="color: #ff69b4;">ACME_AGREE</span>: <span style="color: #61CE3C;">"true"</span>
-    <span style="color: #ff69b4;">volumes</span>:
+<pre class="src src-yaml"><span style="color: #715ab1;">version</span>: <span style="color: #2d9574;">"2.1"</span>
+<span style="color: #715ab1;">services</span>:
+  <span style="color: #715ab1;">web</span>:
+    <span style="color: #715ab1;">image</span>: abiosoft/caddy:no-stats
+    <span style="color: #715ab1;">ports</span>:  <span style="color: #2aa1ae; background-color: #ecf3ec;"># </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Expose the webserver ports to the internet</span>
+      - <span style="color: #2d9574;">"80:80"</span>
+      - <span style="color: #2d9574;">"443:443"</span>
+    <span style="color: #715ab1;">environment</span>:
+      <span style="color: #2aa1ae; background-color: #ecf3ec;"># </span><span style="color: #2aa1ae; background-color: #ecf3ec;">This is where caddy places certs after ACME negotiation.</span>
+      <span style="color: #715ab1;">CADDYPATH</span>: <span style="color: #2d9574;">"/etc/caddycerts"</span>
+      <span style="color: #715ab1;">ACME_AGREE</span>: <span style="color: #2d9574;">"true"</span>
+    <span style="color: #715ab1;">volumes</span>:
       - /srv/caddy/certs:/etc/caddycerts
-      - /srv/caddy/Caddyfile:/etc/Caddyfile  <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">Configuration</span>
-      - /srv/www:/srv/www  <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">the websites</span>
+      - /srv/caddy/Caddyfile:/etc/Caddyfile  <span style="color: #2aa1ae; background-color: #ecf3ec;"># </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Configuration</span>
+      - /srv/www:/srv/www  <span style="color: #2aa1ae; background-color: #ecf3ec;"># </span><span style="color: #2aa1ae; background-color: #ecf3ec;">the websites</span>
       - /srv/caddy/logs:/logs
 </pre>
 </div>
@@ -170,9 +180,9 @@ configuration first.
 </div>
 </div>
 
-<div id="outline-container-orgd8b925e" class="outline-3">
-<h3 id="orgd8b925e">GitHub Configuration</h3>
-<div class="outline-text-3" id="text-orgd8b925e">
+<div id="outline-container-orgd730ee8" class="outline-3">
+<h3 id="orgd730ee8">GitHub Configuration</h3>
+<div class="outline-text-3" id="text-orgd730ee8">
 <p>
 Simply create the GitHub repository, then add a webhook. It is
 important to note the webhook <i>must</i> send a JSON payload. By default a
@@ -183,9 +193,9 @@ payload and will not work.
 </div>
 </div>
 
-<div id="outline-container-orga2eb7ac" class="outline-2">
-<h2 id="orga2eb7ac">Conclusion</h2>
-<div class="outline-text-2" id="text-orga2eb7ac">
+<div id="outline-container-orgf2d3d44" class="outline-2">
+<h2 id="orgf2d3d44">Conclusion</h2>
+<div class="outline-text-2" id="text-orgf2d3d44">
 <p>
 With this simple setup I can write posts. I can easily move the
 configuration to a new host at will. In addition my setup does not
@@ -249,7 +259,10 @@ be.
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computing.html">computing</a> </div></div>
-<div id="postamble" class="status"></div>
+</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-computing.html">computing</a> </div></div>
+<div id="postamble" class="status">
+<hr/>
+<p>Powered by <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a></p>
+</div>
 </body>
 </html>
