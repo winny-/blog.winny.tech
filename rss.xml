@@ -4,7 +4,7 @@
 <title>blog.winny.tech</title>
 <description>blog.winny.tech</description>
 <link>https://blog.winny.tech/</link>
-<lastBuildDate>Fri, 02 Aug 2019 07:22:17 -0500</lastBuildDate>
+<lastBuildDate>Fri, 02 Aug 2019 07:51:00 -0500</lastBuildDate>
 <item>
   <title>The Danger of fuzzy matching over one's PATH</title>
   <description><![CDATA[
@@ -73,9 +73,9 @@ Regardless, I have yet to heed my own warning. Maybe I should just use
 programs I want to launch from rofi. Someday :)
 </p>
 
-<div id="outline-container-orgf026d17" class="outline-2">
-<h2 id="orgf026d17">About Unison</h2>
-<div class="outline-text-2" id="text-orgf026d17">
+<div id="outline-container-orgb3d1b63" class="outline-2">
+<h2 id="orgb3d1b63">About Unison</h2>
+<div class="outline-text-2" id="text-orgb3d1b63">
 <p>
 I should mention unison is a superb tool for synchronizing your
 data. It shows the user a list of changes to each directory being
@@ -285,9 +285,9 @@ Note: I did not explore some of Blink's features such as using it a
 local iOS shell or settings synchronization. YMMV.
 </p>
 
-<div id="outline-container-orgc929b48" class="outline-2">
-<h2 id="orgc929b48">Getting started</h2>
-<div class="outline-text-2" id="text-orgc929b48">
+<div id="outline-container-org6589066" class="outline-2">
+<h2 id="org6589066">Getting started</h2>
+<div class="outline-text-2" id="text-org6589066">
 <p>
 Here are the steps I used to get started with Blink, as it was
 relatively unclear where to find documentation and which settings
@@ -446,9 +446,9 @@ for C!<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
   <title>Publishing with org-static-blog</title>
   <description><![CDATA[
 
-<div id="outline-container-org3f4b242" class="outline-2">
-<h2 id="org3f4b242">Criteria</h2>
-<div class="outline-text-2" id="text-org3f4b242">
+<div id="outline-container-orgc3ae62a" class="outline-2">
+<h2 id="orgc3ae62a">Criteria</h2>
+<div class="outline-text-2" id="text-orgc3ae62a">
 <p>
 After reviewing a list of org-mode<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> capable static website generators<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>,
 I decided to see if org-static-blog<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> could suffice my simple
@@ -469,9 +469,9 @@ achieve a minimum viable web-page for this project.
 </div>
 </div>
 
-<div id="outline-container-org09a644e" class="outline-2">
-<h2 id="org09a644e">Configuration of <code>org-static-blog</code></h2>
-<div class="outline-text-2" id="text-org09a644e">
+<div id="outline-container-orga861f68" class="outline-2">
+<h2 id="orga861f68">Configuration of <code>org-static-blog</code></h2>
+<div class="outline-text-2" id="text-orga861f68">
 <p>
 Following the org-static-blog README documentation, it is very
 straight forward to get a minimal viable website generated. I added
@@ -512,9 +512,9 @@ be necessary to generate a simple site like this one.
 </div>
 </div>
 
-<div id="outline-container-org8fefb4a" class="outline-2">
-<h2 id="org8fefb4a">Deploying with Caddy and GitHub</h2>
-<div class="outline-text-2" id="text-org8fefb4a">
+<div id="outline-container-orgad182b0" class="outline-2">
+<h2 id="orgad182b0">Deploying with Caddy and GitHub</h2>
+<div class="outline-text-2" id="text-orgad182b0">
 <p>
 I am a fan of the Caddy<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup> web server which offers automatic HTTPS
 via LetsEncrypt with only a few lines of configuration. In addition
@@ -538,9 +538,9 @@ fired, the website is now deployed.
 </p>
 </div>
 
-<div id="outline-container-orgc00d206" class="outline-3">
-<h3 id="orgc00d206">Server Configuration</h3>
-<div class="outline-text-3" id="text-orgc00d206">
+<div id="outline-container-org08c0480" class="outline-3">
+<h3 id="org08c0480">Server Configuration</h3>
+<div class="outline-text-3" id="text-org08c0480">
 <p>
 I switched most of my personal internet-related services to Docker<sup><a id="fnr.8" class="footref" href="#fn.8">8</a></sup> in
 conjunction with <code>docker-compose</code><sup><a id="fnr.9" class="footref" href="#fn.9">9</a></sup> last year. The main rationale
@@ -600,9 +600,9 @@ configuration first.
 </div>
 </div>
 
-<div id="outline-container-orgd730ee8" class="outline-3">
-<h3 id="orgd730ee8">GitHub Configuration</h3>
-<div class="outline-text-3" id="text-orgd730ee8">
+<div id="outline-container-orge7f5504" class="outline-3">
+<h3 id="orge7f5504">GitHub Configuration</h3>
+<div class="outline-text-3" id="text-orge7f5504">
 <p>
 Simply create the GitHub repository, then add a webhook. It is
 important to note the webhook <i>must</i> send a JSON payload. By default a
@@ -613,9 +613,9 @@ payload and will not work.
 </div>
 </div>
 
-<div id="outline-container-orgf2d3d44" class="outline-2">
-<h2 id="orgf2d3d44">Conclusion</h2>
-<div class="outline-text-2" id="text-orgf2d3d44">
+<div id="outline-container-org56ea7ec" class="outline-2">
+<h2 id="org56ea7ec">Conclusion</h2>
+<div class="outline-text-2" id="text-org56ea7ec">
 <p>
 With this simple setup I can write posts. I can easily move the
 configuration to a new host at will. In addition my setup does not

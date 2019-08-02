@@ -1,5 +1,3 @@
-/* Test */
-
 div.footpara::before {
     content: " – ";
 }
