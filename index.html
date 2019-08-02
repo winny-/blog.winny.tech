@@ -14,6 +14,124 @@
 <div id="preamble" class="status"></div>
 <div id="content">
 
+<div class="post-date">02 Aug 2019</div><h1 class="post-title"><a href="2019-08-02-the-danger-of-fuzzy-matching-over-ones-path.html">The Danger of fuzzy matching over one's PATH</a></h1>
+<p>
+Awhile back I noticed my personal <code>mnt/</code> directory, my (empty) personal
+<code>tmp/</code> directory, and a few symbolic links disappeared from my home
+directory. I only noticed because I use unison<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> to synchronize my
+desktop and laptop homedirs. The actual amount of removed directories
+and symbolic links were staggering, and it costed me five minutes of
+extra effort to search through the unison UI to ignore files I don&rsquo;t
+want to synchronize. Repeat this a few times a day, with the problem
+occurring at seemingly random intervals, and you&rsquo;ve wasted minutes out
+of every day, which adds up to hours every month.
+</p>
+
+<p>
+For months I had not figured out what the problem was. By chance I had
+noticed while using my application launcher, I had accidentally not
+ran <code>links -g</code> <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> but instead had ran <code>cleanlinks</code>. I wonder to myself
+what was I running by accident, as I had done this before, but had not
+thought anything of it, assuming it was a program that would print
+usage or perform a no-operation by default.
+</p>
+
+<p>
+I was wrong.
+</p>
+
+<p>
+Turns out <code>cleanlinks</code> searches the current working directory for <b>empty</b>
+directories and <b>broken</b> symbolic links. Both are useful. For example I
+keep empty directories in <code>~/mnt/</code> to mount <code>sshfs</code> stuff, and I prefer to
+use <code>~/tmp/</code> as a work directory because no system scripts will touch
+it.<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> I had a few <b>broken</b> symbolic links scattered about, from
+weird git repositories working trees to some stale user-level systemd
+unit links from my archlinux install.
+</p>
+
+<p>
+Making things more interesting, if you run <code>cleanlinks --help</code>, or with
+any flags, it operates as usual. So it&rsquo;s a mistake to also do
+<code>cleanlinks /some/directory/i/want/to/clean</code>. As a part of imake,<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>
+the old X11 ecosystem build tools, <code>cleanlinks</code> will be installed on
+many systems and it&rsquo;s not safe to run it lest you enjoy random stuff
+being messed about with in your current directory.
+</p>
+
+<p>
+How did I manage to run <code>cleanlinks</code> so many times? I did not have links
+installed on the affected machine. And even after I did install it, I
+forgot to remove <code>cleanlinks</code> from my rofi runcache. So it had a higher
+precedence to match than <code>links</code> in certain cases. Hence I ran it a few
+times on accident even after installing links.
+</p>
+
+<p>
+Therefore, I strongly recommend one doesn&rsquo;t fuzzy match over their
+<code>PATH</code>. Who knows what other nasty tools ship on your system that will
+lay waste your productivity, or worse, damage your personal files.
+</p>
+
+<p>
+Regardless, I have yet to heed my own warning. Maybe I should just use
+<code>.desktop</code> files, but then again, maybe there exists a
+<code>cleanlinks.desktop</code>&#x2026; Ideally, I&rsquo;ll create a directory of  symlinks to
+programs I want to launch from rofi. Someday :)
+</p>
+
+<div id="outline-container-org289e212" class="outline-2">
+<h2 id="org289e212">About Unison</h2>
+<div class="outline-text-2" id="text-org289e212">
+<p>
+I should mention unison is a superb tool for synchronizing your
+data. It shows the user a list of changes to each directory being
+synchronized, waits for the user to decide which way each file should
+be synchronized:
+</p>
+
+<ol class="org-ol">
+<li>Send file from host A to B</li>
+<li>Send file from host B to A</li>
+<li>Ignore the file this time</li>
+<li>Ignore the file permanently</li>
+<li>Merge the files</li>
+</ol>
+
+<p>
+Because unison doesn&rsquo;t try to be fancy or automatic, it is easy to
+understand what is happening.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://www.cis.upenn.edu/~bcpierce/unison/">Unison homepage</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+Links 2 is the best web 1.0 browser. It even shows images and
+different text sizes. Screenshots on <a href="http://links.twibright.com/features.php">this page</a>.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+<code>/var/tmp/</code> could also work, but this way I know nobody is gunna
+mess with my files and I won&rsquo;t accidentally mess up permissions on
+sensitive data.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://gitlab.freedesktop.org/xorg/util/imake">imake on freedesktop&rsquo;s GitLab</a>. See also what packages depend on
+imake <a href="https://www.archlinux.org/packages/extra/x86_64/imake/">in Arch Linux</a>. I use Gentoo across my laptop and workstation, so
+it&rsquo;s necessary to have imake installed.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-computing.html">computing</a> <a href="tag-rant.html">rant</a> </div>
 <div class="post-date">28 Jul 2019</div><h1 class="post-title"><a href="2019-07-28-open-url-in-existing-qutebrowser-from-emacs-daemon-on-gentoo.html">Open URL in existing Qutebrowser from Emacs Daemon on Gentoo</a></h1>
 <p>
 On my Gentoo desktops, I use Emacs Daemon via <code>sys-emacs/emacs-daemon</code><sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
@@ -538,70 +656,7 @@ be.
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computing.html">computing</a> </div>
-<div class="post-date">09 Jan 2019</div><h1 class="post-title"><a href="2019-01-09-toggle-redshift-with-keyboard-shortcut.html">Toggle Redshift with Keyboard Shortcut</a></h1>
-<p>
-Redshift is a screen-tinting program that achieves similar goals to
-the popular f.lux<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> program.
-</p>
-
-<p>
-I perused through the redshift man-pages and noticed there is no
-documented way to toggle redshift. Of course one can click the
-notification area icon when using redshift-gtk or <code>SIGTERM</code> the
-redshift process, but neither is very user friendly. (The mouse is not
-user friendly.) After some awkward DuckDuckGo-ing and Googling I found
-an obvious solution on the redshift homepage<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>: simply send <code>SIGUSR1</code> to
-the redshift or redshift-gtk process. When using redshift-gtk, one can
-choose to send <code>SIGUSR1</code> to either redshift or redshift-gtk.
-</p>
-
-<p>
-This is the script I came up with:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-sh"><span style="color: #8B8989; font-style: italic;">#</span><span style="color: #8B8989; font-style: italic;">!/bin/</span><span style="color: #4c83ff;">sh</span>
-<span style="color: #4c83ff;">set</span> -eu
-<span style="color: #4c83ff;">if</span> ! pkill -x -SIGUSR1 redshift; <span style="color: #4c83ff;">then</span>
-    <span style="color: #4c83ff;">echo</span> <span style="color: #61CE3C;">'Could not find redshift process to toggle.'</span> &gt;&amp;2
-    <span style="color: #4c83ff;">exit</span> 1
-<span style="color: #4c83ff;">fi</span>
-</pre>
-</div>
-
-<p>
-After installing the script into my system's <code>PATH</code>, now all I have to
-do is add a line to my Xbindkeys<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> configuration file (<code>~/.xbindkeysrc.scm</code>) such as:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-scheme">(xbindkey '(Mod4 F2) <span style="color: #61CE3C;">"toggle-redshift"</span>)
-</pre>
-</div>
-
-<p>
-Now I can type <code>Mod4-F2</code> and toggle Redshift.
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
-<a href="https://justgetflux.com/">f.lux homepage</a>
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
-<a href="http://jonls.dk/redshift/#configuration-options">Redshift homepage § Configuration Options</a>
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
-<a href="http://www.nongnu.org/xbindkeys/xbindkeys.html">XBindKeys homepage</a>
-</p></div></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-productivity.html">productivity</a> <a href="tag-computing.html">computing</a> </div><div id="archive">
+</div><div class="taglist"><a href="tags.html">Tags:</a> <a href="tag-computing.html">computing</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
 </div>

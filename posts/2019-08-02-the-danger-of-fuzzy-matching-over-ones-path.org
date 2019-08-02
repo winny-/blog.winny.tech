@@ -1,0 +1,85 @@
+#+title: The Danger of fuzzy matching over one's PATH
+#+date: <2019-08-02 Fri 06:00>
+#+filetags: computing rant
+#+options: toc:nil num:nil ':t
+
+Awhile back I noticed my personal =mnt/= directory, my (empty) personal
+=tmp/= directory, and a few symbolic links disappeared from my home
+directory. I only noticed because I use unison[fn:4] to synchronize my
+desktop and laptop homedirs. The actual amount of removed directories
+and symbolic links were staggering, and it costed me five minutes of
+extra effort to search through the unison UI to ignore files I don't
+want to synchronize. Repeat this a few times a day, with the problem
+occurring at seemingly random intervals, and you've wasted minutes out
+of every day, which adds up to hours every month.
+
+For months I had not figured out what the problem was. By chance I had
+noticed while using my application launcher, I had accidentally not
+ran =links -g= [fn:2] but instead had ran =cleanlinks=. I wonder to myself
+what was I running by accident, as I had done this before, but had not
+thought anything of it, assuming it was a program that would print
+usage or perform a no-operation by default.
+
+I was wrong.
+
+Turns out =cleanlinks= searches the current working directory for *empty*
+directories and *broken* symbolic links. Both are useful. For example I
+keep empty directories in =~/mnt/= to mount =sshfs= stuff, and I prefer to
+use =~/tmp/= as a work directory because no system scripts will touch
+it.[fn:1] I had a few *broken* symbolic links scattered about, from
+weird git repositories working trees to some stale user-level systemd
+unit links from my archlinux install.
+
+Making things more interesting, if you run =cleanlinks --help=, or with
+any flags, it operates as usual. So it's a mistake to also do
+=cleanlinks /some/directory/i/want/to/clean=. As a part of imake,[fn:3]
+the old X11 ecosystem build tools, =cleanlinks= will be installed on
+many systems and it's not safe to run it lest you enjoy random stuff
+being messed about with in your current directory.
+
+How did I manage to run =cleanlinks= so many times? I did not have links
+installed on the affected machine. And even after I did install it, I
+forgot to remove =cleanlinks= from my rofi runcache. So it had a higher
+precedence to match than =links= in certain cases. Hence I ran it a few
+times on accident even after installing links.
+
+Therefore, I strongly recommend one doesn't fuzzy match over their
+=PATH=. Who knows what other nasty tools ship on your system that will
+lay waste your productivity, or worse, damage your personal files.
+
+Regardless, I have yet to heed my own warning. Maybe I should just use
+=.desktop= files, but then again, maybe there exists a
+=cleanlinks.desktop=... Ideally, I'll create a directory of  symlinks to
+programs I want to launch from rofi. Someday :)
+
+* About Unison
+
+I should mention unison is a superb tool for synchronizing your
+data. It shows the user a list of changes to each directory being
+synchronized, waits for the user to decide which way each file should
+be synchronized:
+
+1. Send file from host A to B
+2. Send file from host B to A
+3. Ignore the file this time
+4. Ignore the file permanently
+5. Merge the files
+
+Because unison doesn't try to be fancy or automatic, it is easy to
+understand what is happening.
+
+* Footnotes
+
+[fn:4] [[https://www.cis.upenn.edu/~bcpierce/unison/][Unison homepage]]
+
+[fn:3] [[https://gitlab.freedesktop.org/xorg/util/imake][imake on freedesktop's GitLab]]. See also what packages depend on
+imake [[https://www.archlinux.org/packages/extra/x86_64/imake/][in Arch Linux]]. I use Gentoo across my laptop and workstation, so
+it's necessary to have imake installed.
+
+
+[fn:2] Links 2 is the best web 1.0 browser. It even shows images and
+different text sizes. Screenshots on [[http://links.twibright.com/features.php][this page]].
+
+[fn:1] =/var/tmp/= could also work, but this way I know nobody is gunna
+mess with my files and I won't accidentally mess up permissions on
+sensitive data.
