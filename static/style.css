@@ -67,23 +67,31 @@ body {
     overflow-x: auto;
 }
 
+ul.inline-list {
+    padding-left: 0;
+    padding-right: 0;
+
+}
+
+ul.inline-list, ul.inline-list li {
+    display: inline;
+}
+
+ul.inline-list li {
+    padding-right: 0.2em;
+    padding-left: 0.2em;
+}
+
 nav {
     margin-top: .75em;
     margin-bottom: .75em;
 
 }
 
-nav ul {
-    padding-left: 0;
-    padding-right: 0;
+ul.interpunct li:after {
+    content: " · ";
 }
 
-nav ul, nav ul li {
-    display: inline;
-}
-
-
-nav ul li {
-    padding-right: 0.2em;
-    padding-left: 0.2em;
+ul.interpunct li:last-child:after {
+    content: "";
 }

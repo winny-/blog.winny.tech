@@ -13,7 +13,7 @@
 <body>
 <div id="preamble" class="status">
 <nav>
-blog.winny.tech :: <ul>
+blog.winny.tech :: <ul class="inline-list">
 <li><a href=".">Home</a></li>
 <li><a href="archive.html">Archive</a></li>
 <li><a href="tags.html">Tags</a></li>
@@ -54,11 +54,11 @@ ensure <code>XDG_RUNTIME_DIR</code> is set to the expected value:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #3a81c3; font-weight: bold;">defun</span> <span style="color: #6c3163; font-weight: bold;">winny/ensure-XDG_RUNTIME_DIR</span> ()
-  <span style="color: #da8b55;">"Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."</span>
-  (<span style="color: #3a81c3; font-weight: bold;">let</span> ((rd (getenv <span style="color: #2d9574;">"XDG_RUNTIME_DIR"</span>)))
-    (<span style="color: #3a81c3; font-weight: bold;">when</span> (<span style="color: #3a81c3; font-weight: bold;">or</span> (not rd) (string-empty-p rd))
-      (setenv <span style="color: #2d9574;">"XDG_RUNTIME_DIR"</span> (format <span style="color: #2d9574;">"/run/user/%d"</span> (user-uid))))))
+<pre class="src src-emacs-lisp">(<span style="color: #4c83ff;">defun</span> <span style="color: #ff1493;">winny/ensure-XDG_RUNTIME_DIR</span> ()
+  <span style="color: #FBDE2D;">"Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."</span>
+  (<span style="color: #4c83ff;">let</span> ((rd (getenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span>)))
+    (<span style="color: #4c83ff;">when</span> (<span style="color: #4c83ff;">or</span> (not rd) (string-empty-p rd))
+      (setenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span> (format <span style="color: #61CE3C;">"/run/user/%d"</span> (user-uid))))))
 
 (add-hook 'after-init-hook #'winny/ensure-XDG_RUNTIME_DIR)
 </pre>
@@ -87,6 +87,13 @@ love to hear about this.
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-emacs.html">emacs</a> <a href="tag-productivity.html">productivity</a> <a href="tag-computing.html">computing</a> <a href="tag-gentoo.html">gentoo</a> <a href="tag-qutebrowser.html">qutebrowser</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
+</div>
+<div id="postamble" class="status">
+<hr/>
+<ul class="inline-list interpunct">
+<li>Powered by <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a></li>
+<li>Like what I do? <a href="https://www.buymeacoffee.com/winny">Buy me a Coffee</a></li>
+</ul>
 </div>
 </body>
 </html>

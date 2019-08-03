@@ -13,7 +13,7 @@
 <body>
 <div id="preamble" class="status">
 <nav>
-blog.winny.tech :: <ul>
+blog.winny.tech :: <ul class="inline-list">
 <li><a href=".">Home</a></li>
 <li><a href="archive.html">Archive</a></li>
 <li><a href="tags.html">Tags</a></li>
@@ -54,11 +54,11 @@ ensure <code>XDG_RUNTIME_DIR</code> is set to the expected value:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #3a81c3; font-weight: bold;">defun</span> <span style="color: #6c3163; font-weight: bold;">winny/ensure-XDG_RUNTIME_DIR</span> ()
-  <span style="color: #da8b55;">"Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."</span>
-  (<span style="color: #3a81c3; font-weight: bold;">let</span> ((rd (getenv <span style="color: #2d9574;">"XDG_RUNTIME_DIR"</span>)))
-    (<span style="color: #3a81c3; font-weight: bold;">when</span> (<span style="color: #3a81c3; font-weight: bold;">or</span> (not rd) (string-empty-p rd))
-      (setenv <span style="color: #2d9574;">"XDG_RUNTIME_DIR"</span> (format <span style="color: #2d9574;">"/run/user/%d"</span> (user-uid))))))
+<pre class="src src-emacs-lisp">(<span style="color: #4c83ff;">defun</span> <span style="color: #ff1493;">winny/ensure-XDG_RUNTIME_DIR</span> ()
+  <span style="color: #FBDE2D;">"Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."</span>
+  (<span style="color: #4c83ff;">let</span> ((rd (getenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span>)))
+    (<span style="color: #4c83ff;">when</span> (<span style="color: #4c83ff;">or</span> (not rd) (string-empty-p rd))
+      (setenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span> (format <span style="color: #61CE3C;">"/run/user/%d"</span> (user-uid))))))
 
 (add-hook 'after-init-hook #'winny/ensure-XDG_RUNTIME_DIR)
 </pre>
@@ -107,12 +107,12 @@ This is the script I came up with:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #2aa1ae; background-color: #ecf3ec;">#</span><span style="color: #2aa1ae; background-color: #ecf3ec;">!/bin/</span><span style="color: #3a81c3; font-weight: bold;">sh</span>
-<span style="color: #3a81c3;">set</span> -eu
-<span style="color: #3a81c3; font-weight: bold;">if</span> <span style="color: #4e3163;">!</span> pkill -x -SIGUSR1 redshift; <span style="color: #3a81c3; font-weight: bold;">then</span>
-    <span style="color: #3a81c3;">echo</span> <span style="color: #2d9574;">'Could not find redshift process to toggle.'</span> &gt;&amp;2
-    <span style="color: #3a81c3; font-weight: bold;">exit</span> 1
-<span style="color: #3a81c3; font-weight: bold;">fi</span>
+<pre class="src src-sh"><span style="color: #8B8989; font-style: italic;">#</span><span style="color: #8B8989; font-style: italic;">!/bin/</span><span style="color: #4c83ff;">sh</span>
+<span style="color: #4c83ff;">set</span> -eu
+<span style="color: #4c83ff;">if</span> ! pkill -x -SIGUSR1 redshift; <span style="color: #4c83ff;">then</span>
+    <span style="color: #4c83ff;">echo</span> <span style="color: #61CE3C;">'Could not find redshift process to toggle.'</span> &gt;&amp;2
+    <span style="color: #4c83ff;">exit</span> 1
+<span style="color: #4c83ff;">fi</span>
 </pre>
 </div>
 
@@ -122,7 +122,7 @@ do is add a line to my Xbindkeys<sup><a id="fnr.3" class="footref" href="#fn.3">
 </p>
 
 <div class="org-src-container">
-<pre class="src src-scheme">(xbindkey '(Mod4 F2) <span style="color: #2d9574;">"toggle-redshift"</span>)
+<pre class="src src-scheme">(xbindkey '(Mod4 F2) <span style="color: #61CE3C;">"toggle-redshift"</span>)
 </pre>
 </div>
 
@@ -150,6 +150,13 @@ Now I can type <code>Mod4-F2</code> and toggle Redshift.
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-productivity.html">productivity</a> <a href="tag-computing.html">computing</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
+</div>
+<div id="postamble" class="status">
+<hr/>
+<ul class="inline-list interpunct">
+<li>Powered by <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a></li>
+<li>Like what I do? <a href="https://www.buymeacoffee.com/winny">Buy me a Coffee</a></li>
+</ul>
 </div>
 </body>
 </html>

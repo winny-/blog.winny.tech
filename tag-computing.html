@@ -13,7 +13,7 @@
 <body>
 <div id="preamble" class="status">
 <nav>
-blog.winny.tech :: <ul>
+blog.winny.tech :: <ul class="inline-list">
 <li><a href=".">Home</a></li>
 <li><a href="archive.html">Archive</a></li>
 <li><a href="tags.html">Tags</a></li>
@@ -90,9 +90,9 @@ Regardless, I have yet to heed my own warning. Maybe I should just use
 programs I want to launch from rofi. Someday :)
 </p>
 
-<div id="outline-container-orge53a66c" class="outline-2">
-<h2 id="orge53a66c">About Unison</h2>
-<div class="outline-text-2" id="text-orge53a66c">
+<div id="outline-container-orgcef4870" class="outline-2">
+<h2 id="orgcef4870">About Unison</h2>
+<div class="outline-text-2" id="text-orgcef4870">
 <p>
 I should mention unison is a superb tool for synchronizing your
 data. It shows the user a list of changes to each directory being
@@ -172,11 +172,11 @@ ensure <code>XDG_RUNTIME_DIR</code> is set to the expected value:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #3a81c3; font-weight: bold;">defun</span> <span style="color: #6c3163; font-weight: bold;">winny/ensure-XDG_RUNTIME_DIR</span> ()
-  <span style="color: #da8b55;">"Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."</span>
-  (<span style="color: #3a81c3; font-weight: bold;">let</span> ((rd (getenv <span style="color: #2d9574;">"XDG_RUNTIME_DIR"</span>)))
-    (<span style="color: #3a81c3; font-weight: bold;">when</span> (<span style="color: #3a81c3; font-weight: bold;">or</span> (not rd) (string-empty-p rd))
-      (setenv <span style="color: #2d9574;">"XDG_RUNTIME_DIR"</span> (format <span style="color: #2d9574;">"/run/user/%d"</span> (user-uid))))))
+<pre class="src src-emacs-lisp">(<span style="color: #4c83ff;">defun</span> <span style="color: #ff1493;">winny/ensure-XDG_RUNTIME_DIR</span> ()
+  <span style="color: #FBDE2D;">"Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."</span>
+  (<span style="color: #4c83ff;">let</span> ((rd (getenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span>)))
+    (<span style="color: #4c83ff;">when</span> (<span style="color: #4c83ff;">or</span> (not rd) (string-empty-p rd))
+      (setenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span> (format <span style="color: #61CE3C;">"/run/user/%d"</span> (user-uid))))))
 
 (add-hook 'after-init-hook #'winny/ensure-XDG_RUNTIME_DIR)
 </pre>
@@ -285,9 +285,9 @@ Note: I did not explore some of Blink's features such as using it a
 local iOS shell or settings synchronization. YMMV.
 </p>
 
-<div id="outline-container-org28f2106" class="outline-2">
-<h2 id="org28f2106">Getting started</h2>
-<div class="outline-text-2" id="text-org28f2106">
+<div id="outline-container-org244dc42" class="outline-2">
+<h2 id="org244dc42">Getting started</h2>
+<div class="outline-text-2" id="text-org244dc42">
 <p>
 Here are the steps I used to get started with Blink, as it was
 relatively unclear where to find documentation and which settings
@@ -433,9 +433,9 @@ for C!<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-computing.html">computing</a> <a href="tag-rant.html">rant</a> </div>
 <div class="post-date">11 Jan 2019</div><h1 class="post-title"><a href="2019-01-11-publishing-with-org-static-blog.html">Publishing with org-static-blog</a></h1>
 
-<div id="outline-container-org9a3e90a" class="outline-2">
-<h2 id="org9a3e90a">Criteria</h2>
-<div class="outline-text-2" id="text-org9a3e90a">
+<div id="outline-container-org333c292" class="outline-2">
+<h2 id="org333c292">Criteria</h2>
+<div class="outline-text-2" id="text-org333c292">
 <p>
 After reviewing a list of org-mode<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> capable static website generators<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>,
 I decided to see if org-static-blog<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> could suffice my simple
@@ -456,9 +456,9 @@ achieve a minimum viable web-page for this project.
 </div>
 </div>
 
-<div id="outline-container-org31f504f" class="outline-2">
-<h2 id="org31f504f">Configuration of <code>org-static-blog</code></h2>
-<div class="outline-text-2" id="text-org31f504f">
+<div id="outline-container-org794a1f7" class="outline-2">
+<h2 id="org794a1f7">Configuration of <code>org-static-blog</code></h2>
+<div class="outline-text-2" id="text-org794a1f7">
 <p>
 Following the org-static-blog README documentation, it is very
 straight forward to get a minimal viable website generated. I added
@@ -466,18 +466,18 @@ the following to my <code>init.el</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(add-to-list 'auto-mode-alist (cons (concat org-static-blog-posts-directory <span style="color: #2d9574;">".*\\.org\\'"</span>) 'org-static-blog-mode))
-(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-publish-title <span style="color: #2d9574;">"blog.winny.tech"</span>)
-(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-publish-url <span style="color: #2d9574;">"https://blog.winny.tech/"</span>)
-(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-publish-directory <span style="color: #2d9574;">"~/projects/blog/"</span>)
-(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-posts-directory <span style="color: #2d9574;">"~/projects/blog/posts/"</span>)
-(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-drafts-directory <span style="color: #2d9574;">"~/projects/blog/drafts/"</span>)
-(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-enable-tags t)
+<pre class="src src-elisp">(add-to-list 'auto-mode-alist (cons (concat org-static-blog-posts-directory <span style="color: #61CE3C;">".*\\.org\\'"</span>) 'org-static-blog-mode))
+(<span style="color: #4c83ff;">setq</span> org-static-blog-publish-title <span style="color: #61CE3C;">"blog.winny.tech"</span>)
+(<span style="color: #4c83ff;">setq</span> org-static-blog-publish-url <span style="color: #61CE3C;">"https://blog.winny.tech/"</span>)
+(<span style="color: #4c83ff;">setq</span> org-static-blog-publish-directory <span style="color: #61CE3C;">"~/projects/blog/"</span>)
+(<span style="color: #4c83ff;">setq</span> org-static-blog-posts-directory <span style="color: #61CE3C;">"~/projects/blog/posts/"</span>)
+(<span style="color: #4c83ff;">setq</span> org-static-blog-drafts-directory <span style="color: #61CE3C;">"~/projects/blog/drafts/"</span>)
+(<span style="color: #4c83ff;">setq</span> org-static-blog-enable-tags t)
 
-(<span style="color: #3a81c3; font-weight: bold;">setq</span> org-static-blog-page-header
-      <span style="color: #2d9574;">"</span>
-<span style="color: #2d9574;">&lt;link href=\"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
-<span style="color: #2d9574;">"</span>)
+(<span style="color: #4c83ff;">setq</span> org-static-blog-page-header
+      <span style="color: #61CE3C;">"</span>
+<span style="color: #61CE3C;">&lt;link href=\"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
+<span style="color: #61CE3C;">"</span>)
 </pre>
 </div>
 
@@ -499,9 +499,9 @@ be necessary to generate a simple site like this one.
 </div>
 </div>
 
-<div id="outline-container-org23a4708" class="outline-2">
-<h2 id="org23a4708">Deploying with Caddy and GitHub</h2>
-<div class="outline-text-2" id="text-org23a4708">
+<div id="outline-container-org13b295f" class="outline-2">
+<h2 id="org13b295f">Deploying with Caddy and GitHub</h2>
+<div class="outline-text-2" id="text-org13b295f">
 <p>
 I am a fan of the Caddy<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup> web server which offers automatic HTTPS
 via LetsEncrypt with only a few lines of configuration. In addition
@@ -525,9 +525,9 @@ fired, the website is now deployed.
 </p>
 </div>
 
-<div id="outline-container-org92bf56e" class="outline-3">
-<h3 id="org92bf56e">Server Configuration</h3>
-<div class="outline-text-3" id="text-org92bf56e">
+<div id="outline-container-org9a20bda" class="outline-3">
+<h3 id="org9a20bda">Server Configuration</h3>
+<div class="outline-text-3" id="text-org9a20bda">
 <p>
 I switched most of my personal internet-related services to Docker<sup><a id="fnr.8" class="footref" href="#fn.8">8</a></sup> in
 conjunction with <code>docker-compose</code><sup><a id="fnr.9" class="footref" href="#fn.9">9</a></sup> last year. The main rationale
@@ -537,7 +537,7 @@ so it was as simple as adding this to my <code>Caddyfile</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-conf"><span style="color: #ba2f59; font-weight: bold;">blog.winny.tech</span> {
+<pre class="src src-conf"><span style="color: #afd8af;">blog.winny.tech</span> {
         root /srv/www/blog.winny.tech
         gzip
         log /logs/blog.winny.tech.log
@@ -553,21 +553,21 @@ The relevant lines of my <code>docker-compose.yml</code> looks like this:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-yaml"><span style="color: #715ab1;">version</span>: <span style="color: #2d9574;">"2.1"</span>
-<span style="color: #715ab1;">services</span>:
-  <span style="color: #715ab1;">web</span>:
-    <span style="color: #715ab1;">image</span>: abiosoft/caddy:no-stats
-    <span style="color: #715ab1;">ports</span>:  <span style="color: #2aa1ae; background-color: #ecf3ec;"># </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Expose the webserver ports to the internet</span>
-      - <span style="color: #2d9574;">"80:80"</span>
-      - <span style="color: #2d9574;">"443:443"</span>
-    <span style="color: #715ab1;">environment</span>:
-      <span style="color: #2aa1ae; background-color: #ecf3ec;"># </span><span style="color: #2aa1ae; background-color: #ecf3ec;">This is where caddy places certs after ACME negotiation.</span>
-      <span style="color: #715ab1;">CADDYPATH</span>: <span style="color: #2d9574;">"/etc/caddycerts"</span>
-      <span style="color: #715ab1;">ACME_AGREE</span>: <span style="color: #2d9574;">"true"</span>
-    <span style="color: #715ab1;">volumes</span>:
+<pre class="src src-yaml"><span style="color: #ff69b4;">version</span>: <span style="color: #61CE3C;">"2.1"</span>
+<span style="color: #ff69b4;">services</span>:
+  <span style="color: #ff69b4;">web</span>:
+    <span style="color: #ff69b4;">image</span>: abiosoft/caddy:no-stats
+    <span style="color: #ff69b4;">ports</span>:  <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">Expose the webserver ports to the internet</span>
+      - <span style="color: #61CE3C;">"80:80"</span>
+      - <span style="color: #61CE3C;">"443:443"</span>
+    <span style="color: #ff69b4;">environment</span>:
+      <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">This is where caddy places certs after ACME negotiation.</span>
+      <span style="color: #ff69b4;">CADDYPATH</span>: <span style="color: #61CE3C;">"/etc/caddycerts"</span>
+      <span style="color: #ff69b4;">ACME_AGREE</span>: <span style="color: #61CE3C;">"true"</span>
+    <span style="color: #ff69b4;">volumes</span>:
       - /srv/caddy/certs:/etc/caddycerts
-      - /srv/caddy/Caddyfile:/etc/Caddyfile  <span style="color: #2aa1ae; background-color: #ecf3ec;"># </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Configuration</span>
-      - /srv/www:/srv/www  <span style="color: #2aa1ae; background-color: #ecf3ec;"># </span><span style="color: #2aa1ae; background-color: #ecf3ec;">the websites</span>
+      - /srv/caddy/Caddyfile:/etc/Caddyfile  <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">Configuration</span>
+      - /srv/www:/srv/www  <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">the websites</span>
       - /srv/caddy/logs:/logs
 </pre>
 </div>
@@ -587,9 +587,9 @@ configuration first.
 </div>
 </div>
 
-<div id="outline-container-orgd2261ec" class="outline-3">
-<h3 id="orgd2261ec">GitHub Configuration</h3>
-<div class="outline-text-3" id="text-orgd2261ec">
+<div id="outline-container-org7952e30" class="outline-3">
+<h3 id="org7952e30">GitHub Configuration</h3>
+<div class="outline-text-3" id="text-org7952e30">
 <p>
 Simply create the GitHub repository, then add a webhook. It is
 important to note the webhook <i>must</i> send a JSON payload. By default a
@@ -600,9 +600,9 @@ payload and will not work.
 </div>
 </div>
 
-<div id="outline-container-org6d0869d" class="outline-2">
-<h2 id="org6d0869d">Conclusion</h2>
-<div class="outline-text-2" id="text-org6d0869d">
+<div id="outline-container-orgc5769a6" class="outline-2">
+<h2 id="orgc5769a6">Conclusion</h2>
+<div class="outline-text-2" id="text-orgc5769a6">
 <p>
 With this simple setup I can write posts. I can easily move the
 configuration to a new host at will. In addition my setup does not
@@ -689,12 +689,12 @@ This is the script I came up with:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #2aa1ae; background-color: #ecf3ec;">#</span><span style="color: #2aa1ae; background-color: #ecf3ec;">!/bin/</span><span style="color: #3a81c3; font-weight: bold;">sh</span>
-<span style="color: #3a81c3;">set</span> -eu
-<span style="color: #3a81c3; font-weight: bold;">if</span> <span style="color: #4e3163;">!</span> pkill -x -SIGUSR1 redshift; <span style="color: #3a81c3; font-weight: bold;">then</span>
-    <span style="color: #3a81c3;">echo</span> <span style="color: #2d9574;">'Could not find redshift process to toggle.'</span> &gt;&amp;2
-    <span style="color: #3a81c3; font-weight: bold;">exit</span> 1
-<span style="color: #3a81c3; font-weight: bold;">fi</span>
+<pre class="src src-sh"><span style="color: #8B8989; font-style: italic;">#</span><span style="color: #8B8989; font-style: italic;">!/bin/</span><span style="color: #4c83ff;">sh</span>
+<span style="color: #4c83ff;">set</span> -eu
+<span style="color: #4c83ff;">if</span> ! pkill -x -SIGUSR1 redshift; <span style="color: #4c83ff;">then</span>
+    <span style="color: #4c83ff;">echo</span> <span style="color: #61CE3C;">'Could not find redshift process to toggle.'</span> &gt;&amp;2
+    <span style="color: #4c83ff;">exit</span> 1
+<span style="color: #4c83ff;">fi</span>
 </pre>
 </div>
 
@@ -704,7 +704,7 @@ do is add a line to my Xbindkeys<sup><a id="fnr.3" class="footref" href="#fn.3">
 </p>
 
 <div class="org-src-container">
-<pre class="src src-scheme">(xbindkey '(Mod4 F2) <span style="color: #2d9574;">"toggle-redshift"</span>)
+<pre class="src src-scheme">(xbindkey '(Mod4 F2) <span style="color: #61CE3C;">"toggle-redshift"</span>)
 </pre>
 </div>
 
@@ -732,6 +732,13 @@ Now I can type <code>Mod4-F2</code> and toggle Redshift.
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-productivity.html">productivity</a> <a href="tag-computing.html">computing</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
+</div>
+<div id="postamble" class="status">
+<hr/>
+<ul class="inline-list interpunct">
+<li>Powered by <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a></li>
+<li>Like what I do? <a href="https://www.buymeacoffee.com/winny">Buy me a Coffee</a></li>
+</ul>
 </div>
 </body>
 </html>
