@@ -88,8 +88,15 @@ nav {
 
 }
 
+ul.interpunct li {
+    padding-right: 0;
+    padding-left: 0;
+}
+
 ul.interpunct li:after {
     content: " · ";
+    padding-right: .2em;
+    padding-left: .2em;
 }
 
 ul.interpunct li:last-child:after {
