@@ -45,10 +45,42 @@ body {
     padding-top: 1.3em;
 }
 
+.flexcontainer {
+   display: flex;
+   flex-direction: row;
+}
+
+.bigitem {
+    text-align:right;
+   flex: 2 0 0;
+}
+.smallitem {
+   flex: 1 0 0;
+}
+
+@media screen and (max-width: 27.5em) {
+    .flexcontainer {
+        flex-direction: column;
+    }
+
+    .flexcontainer div {
+        text-align: center;
+    }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1em auto 1em;
+}
+
 #content, #preamble, #postamble {
-    max-width: 40em;
     margin-left: auto;
     margin-right: auto;
+    padding-right: .5em;
+    padding-left: .5em;
+    max-width: 40em;
 }
 
 #postamble {
@@ -101,4 +133,10 @@ ul.interpunct li:after {
 
 ul.interpunct li:last-child:after {
     content: "";
+}
+
+@media (orientation: landscape) {
+    #content, #preamble, #postamble {
+        max-width: 65%;
+    }
 }

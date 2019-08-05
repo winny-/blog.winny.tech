@@ -7,16 +7,24 @@
          (org-static-blog-enable-tags . t)
          (org-export-with-toc . nil)
          (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.3\" rel=\"stylesheet\" type=\"text/css\" />
+<link href=\"static/style.css?v=1.4\" rel=\"stylesheet\" type=\"text/css\" />
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
 ")
          (org-static-blog-page-preamble . "
 <nav>
-blog.winny.tech :: <ul class=\"inline-list\">
+<div class=\"flexcontainer\">
+<div class=\"smallitem\">
+blog.winny.tech
+</div>
+<div class=\"bigitem\">
+<ul class=\"inline-list\">
 <li><a href=\".\">Home</a></li>
 <li><a href=\"archive.html\">Archive</a></li>
 <li><a href=\"tags.html\">Tags</a></li>
 <li><a href=\"rss.xml\">RSS Feed</a></li>
 </ul>
+</div>
+</div>
 </nav>
 <hr/>
 ")
