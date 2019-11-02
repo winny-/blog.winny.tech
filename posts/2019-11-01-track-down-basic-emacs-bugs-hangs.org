@@ -1,0 +1,74 @@
+#+title: Track down basic Emacs bugs & hangs
+#+date: <2019-11-01 17:54>
+#+filetags: emacs productivity
+#+options: num:nil
+
+I ran into a hang today with only ivy enabled and nothing else
+configured or installed. The behavior was such that after I typed a
+hostname with a TLD (such as =not.existant.com=[fn:1]), then typed
+=C-x d= to visit a directory or =C-x C-f= to find a file, Emacs would
+hang. My mouse would turn into a pin-wheel. My only recourse was to
+send the 'quit' command via =C-g= to cancel the
+operation. Unfortunately this meant I could not do one of the simplest
+operations in Emacs - visiting files and directories.
+
+* Enter =debug-on-quit=
+
+  After some searching [[https://www.gnu.org/software/emacs/manual/html_node/eintr/Debugging.html#Debugging][I found]] the =debug-on-quit= and =debug-on-error=
+  variables[fn:2], with their corresponding commands =toggle-debug-on-quit=
+  and =toggle-debug-on-error=. Enabling =debug-on-quit= means I can get
+  a backtrace when I type =C-g= of what was happening before I signaled
+  Emacs to quit the current command. Here is an example backtrace:
+
+  #+begin_src fundamental
+Debugger entered--Lisp error: (quit)
+  make-network-process(:name "ffap-machine-p" :buffer nil :host "not.existant.com" :service "discard" :nowait nil :tls-parameters nil)
+  open-network-stream("ffap-machine-p" nil "not.existant.com" "discard")
+  ffap-machine-p("not.existant.com")
+  ffap-machine-at-point()
+  ffap-guesser()
+  ffap-guess-file-name-at-point()
+  run-hook-with-args-until-success(ffap-guess-file-name-at-point)
+  ivy-thing-at-point()
+  ivy--reset-state(#s(ivy-state :prompt "Find file: " :collection read-file-name-internal :predicate nil :require-match confirm-after-completion :initial-input nil :history file-name-history :preselect nil :keymap (keymap (96 lambda (&optional arg) "nil (`nil')" (interactive "p") (if (string= "" ivy-text) (execute-kbd-macro (kbd "M-o b")) (self-insert-command arg))) (C-backspace . counsel-up-directory) (67108991 . counsel-up-directory)) :update-fn nil :sort nil :frame #<frame (Emacs) dummy.txt [Text] /tmp/dummy.txt 0x70a1e20> :window #<window 7 on dummy.txt> :buffer #<buffer dummy.txt> :text nil :action (1 ("o" counsel-find-file-action "default") ("i" #f(compiled-function (x) #<bytecode 0x1b79a11>) "insert") ("w" #f(compiled-function (x) #<bytecode 0x1b79a21>) "copy") ("j" find-file-other-window "other window") ("f" find-file-other-frame "other frame") ("b" counsel-find-file-cd-bookmark-action "cd bookmark") ("x" counsel-find-file-extern "open externally") ("r" counsel-find-file-as-root "open as root") ("R" find-file-read-only "read only") ("k" counsel-find-file-delete "delete") ("c" counsel-find-file-copy "copy file") ("m" counsel-find-file-move "move or rename") ("d" counsel-find-file-mkdir-action "mkdir")) :unwind nil :re-builder nil :matcher counsel--find-file-matcher :dynamic-collection nil :display-transformer-fn ivy-read-file-transformer :directory "/tmp/" :caller counsel-find-file :current nil :def nil :ignore t :multi-action nil :extra-props nil))
+  ivy-read("Find file: " read-file-name-internal :matcher counsel--find-file-matcher :initial-input nil :action counsel-find-file-action :preselect nil :require-match confirm-after-completion :history file-name-history :keymap (keymap (96 lambda (&optional arg) "nil (`nil')" (interactive "p") (if (string= "" ivy-text) (execute-kbd-macro (kbd "M-o b")) (self-insert-command arg))) (C-backspace . counsel-up-directory) (67108991 . counsel-up-directory)) :caller counsel-find-file)
+  counsel--find-file-1("Find file: " nil counsel-find-file-action counsel-find-file)
+  counsel-find-file()
+  funcall-interactively(counsel-find-file)
+  call-interactively(counsel-find-file nil nil)
+  command-execute(counsel-find-file)
+  #+end_src
+
+  If one tries this, they'll also notice every function is a link to the
+  corresponding Emacs lisp or C source function. Pressing =RET= with
+  point on an item will find its definition. Use =C-.= and =C-,= as
+  usual to [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Looking-Up-Identifiers.html#Looking-Up-Identifiers][follow and return from function definitions]].
+
+  Thanks to this feature, I was able to quickly focus on a "bug" related
+  to the find file at point subsystem as used by ivy, which causes Emacs
+  to ping random hostname-looking addresses under the point. [[https://github.com/abo-abo/swiper/issues/2311][I reported
+  it]], maybe a default will get changed; most importantly, it's
+  documented somewhere now.
+
+* Don't forget about =debug-on-error=
+
+  =debug-on-error= is also extremely useful, especially when extending
+  Emacs with your own Elisp code. When I write Elisp, I almost always
+  enabled this when testing. The Elisp language and its libraries are
+  somewhat anachronistic and each component is seemingly tightly coupled
+  with the next, making it hard to understand any particular
+  subsystem. You _will_ write bad Elisp, even if you're a wizard.
+  Everybody writes buggy Elisp. That's why I find an Emacs bug
+  every few months.  [[https://www.emacswiki.org/emacs/WhyDoesElispSuck][It's just a very awkward language]]. Regardless, Emacs
+  is probably the most flexible and powerful editor out there, and in
+  this case, [[https://www.dreamsongs.com/WorseIsBetter.html][Worse is Better]]. And don't forget, a good challenge is a
+  fun challenge.
+
+* Footnotes
+
+[fn:2] By the way, you can just read the info pages in Emacs (=C-h
+i=). Don't be like me, and read the infopages in the web browser,
+that's silly. Emacs is the best documetation browser. :)
+
+[fn:1] I know I misspelled existent. What's important is it's
+recognized as a valid fully qualified domain name by Emacs.

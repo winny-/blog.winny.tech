@@ -62,11 +62,11 @@ ensure <code>XDG_RUNTIME_DIR</code> is set to the expected value:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(defun winny/ensure-XDG_RUNTIME_DIR ()
-  "Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."
-  (let ((rd (getenv "XDG_RUNTIME_DIR")))
-    (when (or (not rd) (string-empty-p rd))
-      (setenv "XDG_RUNTIME_DIR" (format "/run/user/%d" (user-uid))))))
+<pre class="src src-emacs-lisp">(<span style="color: #4c83ff;">defun</span> <span style="color: #ff1493;">winny/ensure-XDG_RUNTIME_DIR</span> ()
+  <span style="color: #FBDE2D;">"Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."</span>
+  (<span style="color: #4c83ff;">let</span> ((rd (getenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span>)))
+    (<span style="color: #4c83ff;">when</span> (<span style="color: #4c83ff;">or</span> (not rd) (string-empty-p rd))
+      (setenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span> (format <span style="color: #61CE3C;">"/run/user/%d"</span> (user-uid))))))
 
 (add-hook 'after-init-hook #'winny/ensure-XDG_RUNTIME_DIR)
 </pre>

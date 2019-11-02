@@ -4,7 +4,114 @@
 <title>blog.winny.tech</title>
 <description>blog.winny.tech</description>
 <link>https://blog.winny.tech/</link>
-<lastBuildDate>Mon, 05 Aug 2019 10:19:04 -0500</lastBuildDate>
+<lastBuildDate>Fri, 01 Nov 2019 19:20:32 -0500</lastBuildDate>
+<item>
+  <title>Track down basic Emacs bugs & hangs</title>
+  <description><![CDATA[
+<p>
+I ran into a hang today with only ivy enabled and nothing else
+configured or installed. The behavior was such that after I typed a
+hostname with a TLD (such as <code>not.existant.com</code><sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>), then typed
+<code>C-x d</code> to visit a directory or <code>C-x C-f</code> to find a file, Emacs would
+hang. My mouse would turn into a pin-wheel. My only recourse was to
+send the 'quit' command via <code>C-g</code> to cancel the
+operation. Unfortunately this meant I could not do one of the simplest
+operations in Emacs - visiting files and directories.
+</p>
+
+<div id="outline-container-org2968dbd" class="outline-2">
+<h2 id="org2968dbd">Enter <code>debug-on-quit</code></h2>
+<div class="outline-text-2" id="text-org2968dbd">
+<p>
+After some searching <a href="https://www.gnu.org/software/emacs/manual/html_node/eintr/Debugging.html#Debugging">I found</a> the <code>debug-on-quit</code> and <code>debug-on-error</code>
+variables<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>, with their corresponding commands <code>toggle-debug-on-quit</code>
+and <code>toggle-debug-on-error</code>. Enabling <code>debug-on-quit</code> means I can get
+a backtrace when I type <code>C-g</code> of what was happening before I signaled
+Emacs to quit the current command. Here is an example backtrace:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-fundamental">Debugger entered--Lisp error: (quit)
+  make-network-process(:name <span style="color: #61CE3C;">"ffap-machine-p"</span> :buffer nil :host <span style="color: #61CE3C;">"not.existant.com"</span> :service <span style="color: #61CE3C;">"discard"</span> :nowait nil :tls-parameters nil)
+  open-network-stream(<span style="color: #61CE3C;">"ffap-machine-p"</span> nil <span style="color: #61CE3C;">"not.existant.com"</span> <span style="color: #61CE3C;">"discard"</span>)
+  ffap-machine-p(<span style="color: #61CE3C;">"not.existant.com"</span>)
+  ffap-machine-at-point()
+  ffap-guesser()
+  ffap-guess-file-name-at-point()
+  run-hook-with-args-until-success(ffap-guess-file-name-at-point)
+  ivy-thing-at-point()
+  ivy--reset-state(#s(ivy-state :prompt <span style="color: #61CE3C;">"Find file: "</span> :collection read-file-name-internal :predicate nil :require-match confirm-after-completion :initial-input nil :history file-name-history :preselect nil :keymap (keymap (96 lambda (&amp;optional arg) <span style="color: #61CE3C;">"nil (`nil')"</span> (interactive <span style="color: #61CE3C;">"p"</span>) (if (string= <span style="color: #61CE3C;">""</span> ivy-text) (execute-kbd-macro (kbd <span style="color: #61CE3C;">"M-o b"</span>)) (self-insert-command arg))) (C-backspace . counsel-up-directory) (67108991 . counsel-up-directory)) :update-fn nil :sort nil :frame #&lt;frame (Emacs) dummy.txt [Text] /tmp/dummy.txt 0x70a1e20&gt; :window #&lt;window 7 on dummy.txt&gt; :buffer #&lt;buffer dummy.txt&gt; :text nil :action (1 (<span style="color: #61CE3C;">"o"</span> counsel-find-file-action <span style="color: #61CE3C;">"default"</span>) (<span style="color: #61CE3C;">"i"</span> #f(compiled-function (x) #&lt;bytecode 0x1b79a11&gt;) <span style="color: #61CE3C;">"insert"</span>) (<span style="color: #61CE3C;">"w"</span> #f(compiled-function (x) #&lt;bytecode 0x1b79a21&gt;) <span style="color: #61CE3C;">"copy"</span>) (<span style="color: #61CE3C;">"j"</span> find-file-other-window <span style="color: #61CE3C;">"other window"</span>) (<span style="color: #61CE3C;">"f"</span> find-file-other-frame <span style="color: #61CE3C;">"other frame"</span>) (<span style="color: #61CE3C;">"b"</span> counsel-find-file-cd-bookmark-action <span style="color: #61CE3C;">"cd bookmark"</span>) (<span style="color: #61CE3C;">"x"</span> counsel-find-file-extern <span style="color: #61CE3C;">"open externally"</span>) (<span style="color: #61CE3C;">"r"</span> counsel-find-file-as-root <span style="color: #61CE3C;">"open as root"</span>) (<span style="color: #61CE3C;">"R"</span> find-file-read-only <span style="color: #61CE3C;">"read only"</span>) (<span style="color: #61CE3C;">"k"</span> counsel-find-file-delete <span style="color: #61CE3C;">"delete"</span>) (<span style="color: #61CE3C;">"c"</span> counsel-find-file-copy <span style="color: #61CE3C;">"copy file"</span>) (<span style="color: #61CE3C;">"m"</span> counsel-find-file-move <span style="color: #61CE3C;">"move or rename"</span>) (<span style="color: #61CE3C;">"d"</span> counsel-find-file-mkdir-action <span style="color: #61CE3C;">"mkdir"</span>)) :unwind nil :re-builder nil :matcher counsel--find-file-matcher :dynamic-collection nil :display-transformer-fn ivy-read-file-transformer :directory <span style="color: #61CE3C;">"/tmp/"</span> :caller counsel-find-file :current nil :def nil :ignore t :multi-action nil :extra-props nil))
+  ivy-read(<span style="color: #61CE3C;">"Find file: "</span> read-file-name-internal :matcher counsel--find-file-matcher :initial-input nil :action counsel-find-file-action :preselect nil :require-match confirm-after-completion :history file-name-history :keymap (keymap (96 lambda (&amp;optional arg) <span style="color: #61CE3C;">"nil (`nil')"</span> (interactive <span style="color: #61CE3C;">"p"</span>) (if (string= <span style="color: #61CE3C;">""</span> ivy-text) (execute-kbd-macro (kbd <span style="color: #61CE3C;">"M-o b"</span>)) (self-insert-command arg))) (C-backspace . counsel-up-directory) (67108991 . counsel-up-directory)) :caller counsel-find-file)
+  counsel--find-file-1(<span style="color: #61CE3C;">"Find file: "</span> nil counsel-find-file-action counsel-find-file)
+  counsel-find-file()
+  funcall-interactively(counsel-find-file)
+  call-interactively(counsel-find-file nil nil)
+  command-execute(counsel-find-file)
+</pre>
+</div>
+
+<p>
+If one tries this, they'll also notice every function is a link to the
+corresponding Emacs lisp or C source function. Pressing <code>RET</code> with
+point on an item will find its definition. Use <code>C-.</code> and <code>C-,</code> as
+usual to <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Looking-Up-Identifiers.html#Looking-Up-Identifiers">follow and return from function definitions</a>.
+</p>
+
+<p>
+Thanks to this feature, I was able to quickly focus on a "bug" related
+to the find file at point subsystem as used by ivy, which causes Emacs
+to ping random hostname-looking addresses under the point. <a href="https://github.com/abo-abo/swiper/issues/2311">I reported
+it</a>, maybe a default will get changed; most importantly, it's
+documented somewhere now.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org46779c3" class="outline-2">
+<h2 id="org46779c3">Don't forget about <code>debug-on-error</code></h2>
+<div class="outline-text-2" id="text-org46779c3">
+<p>
+<code>debug-on-error</code> is also extremely useful, especially when extending
+Emacs with your own Elisp code. When I write Elisp, I almost always
+enabled this when testing. The Elisp language and its libraries are
+somewhat anachronistic and each component is seemingly tightly coupled
+with the next, making it hard to understand any particular
+subsystem. You <span class="underline">will</span> write bad Elisp, even if you're a wizard.
+Everybody writes buggy Elisp. That's why I find an Emacs bug
+every few months.  <a href="https://www.emacswiki.org/emacs/WhyDoesElispSuck">It's just a very awkward language</a>. Regardless, Emacs
+is probably the most flexible and powerful editor out there, and in
+this case, <a href="https://www.dreamsongs.com/WorseIsBetter.html">Worse is Better</a>. And don't forget, a good challenge is a
+fun challenge.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org42a2362" class="outline-2">
+<h2 id="org42a2362">Shoutouts</h2>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+I know I misspelled existent. What's important is it's
+recognized as a valid fully qualified domain name by Emacs.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+By the way, you can just read the info pages in Emacs (<code>C-h
+i</code>). Don't be like me, and read the infopages in the web browser,
+that's silly. Emacs is the best documetation browser. :)
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-emacs.html">emacs</a> <a href="tag-productivity.html">productivity</a> </div>]]></description>
+  <category>emacs</category>
+  <category>productivity</category>
+  <link>https://blog.winny.tech/2019-11-01-track-down-basic-emacs-bugs-hangs.html</link>
+  <pubDate>Fri, 01 Nov 2019 17:54:00 -0500</pubDate>
+</item>
 <item>
   <title>The Danger of fuzzy matching over one's PATH</title>
   <description><![CDATA[
@@ -73,9 +180,9 @@ Regardless, I have yet to heed my own warning. Maybe I should just use
 programs I want to launch from rofi. Someday :)
 </p>
 
-<div id="outline-container-orgd6a7370" class="outline-2">
-<h2 id="orgd6a7370">About Unison</h2>
-<div class="outline-text-2" id="text-orgd6a7370">
+<div id="outline-container-org13a254e" class="outline-2">
+<h2 id="org13a254e">About Unison</h2>
+<div class="outline-text-2" id="text-org13a254e">
 <p>
 I should mention unison is a superb tool for synchronizing your
 data. It shows the user a list of changes to each directory being
@@ -162,11 +269,11 @@ ensure <code>XDG_RUNTIME_DIR</code> is set to the expected value:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">(defun winny/ensure-XDG_RUNTIME_DIR ()
-  "Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."
-  (let ((rd (getenv "XDG_RUNTIME_DIR")))
-    (when (or (not rd) (string-empty-p rd))
-      (setenv "XDG_RUNTIME_DIR" (format "/run/user/%d" (user-uid))))))
+<pre class="src src-emacs-lisp">(<span style="color: #4c83ff;">defun</span> <span style="color: #ff1493;">winny/ensure-XDG_RUNTIME_DIR</span> ()
+  <span style="color: #FBDE2D;">"Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."</span>
+  (<span style="color: #4c83ff;">let</span> ((rd (getenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span>)))
+    (<span style="color: #4c83ff;">when</span> (<span style="color: #4c83ff;">or</span> (not rd) (string-empty-p rd))
+      (setenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span> (format <span style="color: #61CE3C;">"/run/user/%d"</span> (user-uid))))))
 
 (add-hook 'after-init-hook #'winny/ensure-XDG_RUNTIME_DIR)
 </pre>
@@ -285,9 +392,9 @@ Note: I did not explore some of Blink's features such as using it a
 local iOS shell or settings synchronization. YMMV.
 </p>
 
-<div id="outline-container-orgeab01ec" class="outline-2">
-<h2 id="orgeab01ec">Getting started</h2>
-<div class="outline-text-2" id="text-orgeab01ec">
+<div id="outline-container-org07f1c49" class="outline-2">
+<h2 id="org07f1c49">Getting started</h2>
+<div class="outline-text-2" id="text-org07f1c49">
 <p>
 Here are the steps I used to get started with Blink, as it was
 relatively unclear where to find documentation and which settings
@@ -446,9 +553,9 @@ for C!<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
   <title>Publishing with org-static-blog</title>
   <description><![CDATA[
 
-<div id="outline-container-org56c57fa" class="outline-2">
-<h2 id="org56c57fa">Criteria</h2>
-<div class="outline-text-2" id="text-org56c57fa">
+<div id="outline-container-orgde9f033" class="outline-2">
+<h2 id="orgde9f033">Criteria</h2>
+<div class="outline-text-2" id="text-orgde9f033">
 <p>
 After reviewing a list of org-mode<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> capable static website generators<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>,
 I decided to see if org-static-blog<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> could suffice my simple
@@ -469,9 +576,9 @@ achieve a minimum viable web-page for this project.
 </div>
 </div>
 
-<div id="outline-container-orgf729103" class="outline-2">
-<h2 id="orgf729103">Configuration of <code>org-static-blog</code></h2>
-<div class="outline-text-2" id="text-orgf729103">
+<div id="outline-container-orgb0814b5" class="outline-2">
+<h2 id="orgb0814b5">Configuration of <code>org-static-blog</code></h2>
+<div class="outline-text-2" id="text-orgb0814b5">
 <p>
 Following the org-static-blog README documentation, it is very
 straight forward to get a minimal viable website generated. I added
@@ -479,18 +586,18 @@ the following to my <code>init.el</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-elisp">(add-to-list 'auto-mode-alist (cons (concat org-static-blog-posts-directory ".*\\.org\\'") 'org-static-blog-mode))
-(setq org-static-blog-publish-title "blog.winny.tech")
-(setq org-static-blog-publish-url "https://blog.winny.tech/")
-(setq org-static-blog-publish-directory "~/projects/blog/")
-(setq org-static-blog-posts-directory "~/projects/blog/posts/")
-(setq org-static-blog-drafts-directory "~/projects/blog/drafts/")
-(setq org-static-blog-enable-tags t)
+<pre class="src src-elisp">(add-to-list 'auto-mode-alist (cons (concat org-static-blog-posts-directory <span style="color: #61CE3C;">".*\\.org\\'"</span>) 'org-static-blog-mode))
+(<span style="color: #4c83ff;">setq</span> org-static-blog-publish-title <span style="color: #61CE3C;">"blog.winny.tech"</span>)
+(<span style="color: #4c83ff;">setq</span> org-static-blog-publish-url <span style="color: #61CE3C;">"https://blog.winny.tech/"</span>)
+(<span style="color: #4c83ff;">setq</span> org-static-blog-publish-directory <span style="color: #61CE3C;">"~/projects/blog/"</span>)
+(<span style="color: #4c83ff;">setq</span> org-static-blog-posts-directory <span style="color: #61CE3C;">"~/projects/blog/posts/"</span>)
+(<span style="color: #4c83ff;">setq</span> org-static-blog-drafts-directory <span style="color: #61CE3C;">"~/projects/blog/drafts/"</span>)
+(<span style="color: #4c83ff;">setq</span> org-static-blog-enable-tags t)
 
-(setq org-static-blog-page-header
-      "
-&lt;link href=\"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;
-")
+(<span style="color: #4c83ff;">setq</span> org-static-blog-page-header
+      <span style="color: #61CE3C;">"</span>
+<span style="color: #61CE3C;">&lt;link href=\"static/style.css\" rel=\"stylesheet\" type=\"text/css\" /&gt;</span>
+<span style="color: #61CE3C;">"</span>)
 </pre>
 </div>
 
@@ -512,9 +619,9 @@ be necessary to generate a simple site like this one.
 </div>
 </div>
 
-<div id="outline-container-orgad3a481" class="outline-2">
-<h2 id="orgad3a481">Deploying with Caddy and GitHub</h2>
-<div class="outline-text-2" id="text-orgad3a481">
+<div id="outline-container-orgab8bddb" class="outline-2">
+<h2 id="orgab8bddb">Deploying with Caddy and GitHub</h2>
+<div class="outline-text-2" id="text-orgab8bddb">
 <p>
 I am a fan of the Caddy<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup> web server which offers automatic HTTPS
 via LetsEncrypt with only a few lines of configuration. In addition
@@ -538,9 +645,9 @@ fired, the website is now deployed.
 </p>
 </div>
 
-<div id="outline-container-orge4db854" class="outline-3">
-<h3 id="orge4db854">Server Configuration</h3>
-<div class="outline-text-3" id="text-orge4db854">
+<div id="outline-container-org0ca7c75" class="outline-3">
+<h3 id="org0ca7c75">Server Configuration</h3>
+<div class="outline-text-3" id="text-org0ca7c75">
 <p>
 I switched most of my personal internet-related services to Docker<sup><a id="fnr.8" class="footref" href="#fn.8">8</a></sup> in
 conjunction with <code>docker-compose</code><sup><a id="fnr.9" class="footref" href="#fn.9">9</a></sup> last year. The main rationale
@@ -550,7 +657,7 @@ so it was as simple as adding this to my <code>Caddyfile</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-conf">blog.winny.tech {
+<pre class="src src-conf"><span style="color: #afd8af;">blog.winny.tech</span> {
         root /srv/www/blog.winny.tech
         gzip
         log /logs/blog.winny.tech.log
@@ -566,21 +673,21 @@ The relevant lines of my <code>docker-compose.yml</code> looks like this:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-yaml">version: "2.1"
-services:
-  web:
-    image: abiosoft/caddy:no-stats
-    ports:  <span style="color: #AF8700;"># </span><span style="color: #AF8700;">Expose the webserver ports to the internet</span>
-      - "80:80"
-      - "443:443"
-    environment:
-      <span style="color: #AF8700;"># </span><span style="color: #AF8700;">This is where caddy places certs after ACME negotiation.</span>
-      CADDYPATH: "/etc/caddycerts"
-      ACME_AGREE: "true"
-    volumes:
+<pre class="src src-yaml"><span style="color: #ff69b4;">version</span>: <span style="color: #61CE3C;">"2.1"</span>
+<span style="color: #ff69b4;">services</span>:
+  <span style="color: #ff69b4;">web</span>:
+    <span style="color: #ff69b4;">image</span>: abiosoft/caddy:no-stats
+    <span style="color: #ff69b4;">ports</span>:  <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">Expose the webserver ports to the internet</span>
+      - <span style="color: #61CE3C;">"80:80"</span>
+      - <span style="color: #61CE3C;">"443:443"</span>
+    <span style="color: #ff69b4;">environment</span>:
+      <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">This is where caddy places certs after ACME negotiation.</span>
+      <span style="color: #ff69b4;">CADDYPATH</span>: <span style="color: #61CE3C;">"/etc/caddycerts"</span>
+      <span style="color: #ff69b4;">ACME_AGREE</span>: <span style="color: #61CE3C;">"true"</span>
+    <span style="color: #ff69b4;">volumes</span>:
       - /srv/caddy/certs:/etc/caddycerts
-      - /srv/caddy/Caddyfile:/etc/Caddyfile  <span style="color: #AF8700;"># </span><span style="color: #AF8700;">Configuration</span>
-      - /srv/www:/srv/www  <span style="color: #AF8700;"># </span><span style="color: #AF8700;">the websites</span>
+      - /srv/caddy/Caddyfile:/etc/Caddyfile  <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">Configuration</span>
+      - /srv/www:/srv/www  <span style="color: #8B8989; font-style: italic;"># </span><span style="color: #8B8989; font-style: italic;">the websites</span>
       - /srv/caddy/logs:/logs
 </pre>
 </div>
@@ -600,9 +707,9 @@ configuration first.
 </div>
 </div>
 
-<div id="outline-container-orgcf7acc1" class="outline-3">
-<h3 id="orgcf7acc1">GitHub Configuration</h3>
-<div class="outline-text-3" id="text-orgcf7acc1">
+<div id="outline-container-orged23b2f" class="outline-3">
+<h3 id="orged23b2f">GitHub Configuration</h3>
+<div class="outline-text-3" id="text-orged23b2f">
 <p>
 Simply create the GitHub repository, then add a webhook. It is
 important to note the webhook <i>must</i> send a JSON payload. By default a
@@ -613,9 +720,9 @@ payload and will not work.
 </div>
 </div>
 
-<div id="outline-container-org941de37" class="outline-2">
-<h2 id="org941de37">Conclusion</h2>
-<div class="outline-text-2" id="text-org941de37">
+<div id="outline-container-orgd4d8912" class="outline-2">
+<h2 id="orgd4d8912">Conclusion</h2>
+<div class="outline-text-2" id="text-orgd4d8912">
 <p>
 With this simple setup I can write posts. I can easily move the
 configuration to a new host at will. In addition my setup does not
@@ -708,12 +815,12 @@ This is the script I came up with:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #AF8700;">#</span><span style="color: #AF8700;">!/bin/</span>sh
-set -eu
-if ! pkill -x -SIGUSR1 redshift; then
-    echo 'Could not find redshift process to toggle.' &gt;&amp;2
-    exit 1
-fi
+<pre class="src src-sh"><span style="color: #8B8989; font-style: italic;">#</span><span style="color: #8B8989; font-style: italic;">!/bin/</span><span style="color: #4c83ff;">sh</span>
+<span style="color: #4c83ff;">set</span> -eu
+<span style="color: #4c83ff;">if</span> ! pkill -x -SIGUSR1 redshift; <span style="color: #4c83ff;">then</span>
+    <span style="color: #4c83ff;">echo</span> <span style="color: #61CE3C;">'Could not find redshift process to toggle.'</span> &gt;&amp;2
+    <span style="color: #4c83ff;">exit</span> 1
+<span style="color: #4c83ff;">fi</span>
 </pre>
 </div>
 
@@ -723,7 +830,7 @@ do is add a line to my Xbindkeys<sup><a id="fnr.3" class="footref" href="#fn.3">
 </p>
 
 <div class="org-src-container">
-<pre class="src src-scheme">(xbindkey '(Mod4 F2) "toggle-redshift")
+<pre class="src src-scheme">(xbindkey '(Mod4 F2) <span style="color: #61CE3C;">"toggle-redshift"</span>)
 </pre>
 </div>
 
