@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
 <channel>
-<title>blog.winny.tech</title>
-<description>blog.winny.tech</description>
+<title><![CDATA[blog.winny.tech]]></title>
+<description><![CDATA[blog.winny.tech]]></description>
 <link>https://blog.winny.tech/</link>
-<lastBuildDate>Fri, 01 Nov 2019 19:23:50 -0500</lastBuildDate>
+<lastBuildDate>Fri, 01 Nov 2019 21:35:36 -0500</lastBuildDate>
 <item>
-  <title>Track down basic Emacs bugs & hangs</title>
+  <title><![CDATA[Track down basic Emacs bugs & hangs]]></title>
   <description><![CDATA[
 <p>
 I ran into a hang today with only ivy enabled and nothing else
@@ -103,13 +103,13 @@ that's silly. Emacs is the best documetation browser. :)
 
 </div>
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-emacs.html">emacs</a> <a href="tag-productivity.html">productivity</a> </div>]]></description>
-  <category>emacs</category>
-  <category>productivity</category>
+  <category><![CDATA[emacs]]></category>
+  <category><![CDATA[productivity]]></category>
   <link>https://blog.winny.tech/2019-11-01-track-down-basic-emacs-bugs-hangs.html</link>
   <pubDate>Fri, 01 Nov 2019 17:54:00 -0500</pubDate>
 </item>
 <item>
-  <title>The Danger of fuzzy matching over one's PATH</title>
+  <title><![CDATA[The Danger of fuzzy matching over one's PATH]]></title>
   <description><![CDATA[
 <p>
 Awhile back I noticed my personal <code>mnt/</code> directory, my (empty) personal
@@ -228,13 +228,13 @@ it&rsquo;s necessary to have imake installed.
 
 </div>
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-computing.html">computing</a> <a href="tag-rant.html">rant</a> </div>]]></description>
-  <category>computing</category>
-  <category>rant</category>
+  <category><![CDATA[computing]]></category>
+  <category><![CDATA[rant]]></category>
   <link>https://blog.winny.tech/2019-08-02-the-danger-of-fuzzy-matching-over-ones-path.html</link>
   <pubDate>Fri, 02 Aug 2019 06:00:00 -0500</pubDate>
 </item>
 <item>
-  <title>Open URL in existing Qutebrowser from Emacs Daemon on Gentoo</title>
+  <title><![CDATA[Open URL in existing Qutebrowser from Emacs Daemon on Gentoo]]></title>
   <description><![CDATA[
 <p>
 On my Gentoo desktops, I use Emacs Daemon via <code>sys-emacs/emacs-daemon</code><sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
@@ -296,16 +296,16 @@ love to hear about this.
 
 </div>
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-emacs.html">emacs</a> <a href="tag-productivity.html">productivity</a> <a href="tag-computing.html">computing</a> <a href="tag-gentoo.html">gentoo</a> <a href="tag-qutebrowser.html">qutebrowser</a> </div>]]></description>
-  <category>emacs</category>
-  <category>productivity</category>
-  <category>computing</category>
-  <category>gentoo</category>
-  <category>qutebrowser</category>
+  <category><![CDATA[emacs]]></category>
+  <category><![CDATA[productivity]]></category>
+  <category><![CDATA[computing]]></category>
+  <category><![CDATA[gentoo]]></category>
+  <category><![CDATA[qutebrowser]]></category>
   <link>https://blog.winny.tech/2019-07-28-open-url-in-existing-qutebrowser-from-emacs-daemon-on-gentoo.html</link>
   <pubDate>Sun, 28 Jul 2019 03:38:00 -0500</pubDate>
 </item>
 <item>
-  <title>Blink Shell: First Thoughts</title>
+  <title><![CDATA[Blink Shell: First Thoughts]]></title>
   <description><![CDATA[
 <p>
 As a heavy user of SSH to manage computers and IRC via command line
@@ -512,12 +512,12 @@ run <code>mosh worf</code>.</li>
 
 </div>
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-computing.html">computing</a> </div>]]></description>
-  <category>computing</category>
+  <category><![CDATA[computing]]></category>
   <link>https://blog.winny.tech/2019-01-22-blink-shell-first-thoughts.html</link>
   <pubDate>Tue, 22 Jan 2019 22:35:00 -0600</pubDate>
 </item>
 <item>
-  <title>GNU C Style</title>
+  <title><![CDATA[GNU C Style]]></title>
   <description><![CDATA[
 <p>
 No. Do not use it please! There are far easier-to-read and easier-to-use styles
@@ -540,13 +540,13 @@ for C!<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
 
 </div>
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-computing.html">computing</a> <a href="tag-rant.html">rant</a> </div>]]></description>
-  <category>computing</category>
-  <category>rant</category>
+  <category><![CDATA[computing]]></category>
+  <category><![CDATA[rant]]></category>
   <link>https://blog.winny.tech/2019-01-13-gnu-c-style.html</link>
   <pubDate>Sun, 13 Jan 2019 12:57:00 -0600</pubDate>
 </item>
 <item>
-  <title>Publishing with org-static-blog</title>
+  <title><![CDATA[Publishing with org-static-blog]]></title>
   <description><![CDATA[
 
 <div id="outline-container-orgde9f033" class="outline-2">
@@ -783,12 +783,12 @@ be.
 
 </div>
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-computing.html">computing</a> </div>]]></description>
-  <category>computing</category>
+  <category><![CDATA[computing]]></category>
   <link>https://blog.winny.tech/2019-01-11-publishing-with-org-static-blog.html</link>
   <pubDate>Fri, 11 Jan 2019 16:00:00 -0600</pubDate>
 </item>
 <item>
-  <title>Toggle Redshift with Keyboard Shortcut</title>
+  <title><![CDATA[Toggle Redshift with Keyboard Shortcut]]></title>
   <description><![CDATA[
 <p>
 Redshift is a screen-tinting program that achieves similar goals to
@@ -852,8 +852,8 @@ Now I can type <code>Mod4-F2</code> and toggle Redshift.
 
 </div>
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-productivity.html">productivity</a> <a href="tag-computing.html">computing</a> </div>]]></description>
-  <category>productivity</category>
-  <category>computing</category>
+  <category><![CDATA[productivity]]></category>
+  <category><![CDATA[computing]]></category>
   <link>https://blog.winny.tech/2019-01-09-toggle-redshift-with-keyboard-shortcut.html</link>
   <pubDate>Wed, 09 Jan 2019 08:04:00 -0600</pubDate>
 </item>
