@@ -1,0 +1,107 @@
+#+title: GDG Milwaukee 2019 DevFest - We participated!
+#+date: <2019-11-06 02:39>
+#+filetags: community
+#+options: num:nil
+
+I attended the [[https://www.meetup.com/GDG-UWM/events/264945191/][GDG Milwaukee 2019 DevFest]] last Saturday. This was my
+second hackathon. Around 6-9 teams participated. We coded for six
+hours, and I learned a lot about team dynamics. We formed a team of eight
+participants. We encountered a couple significant challenges.
+
+* The stack matters
+
+  Initially we decided to use Python and the [[https://www.djangoproject.com/][Django framework]]. This
+  turned out to be a grave error, because picking up Django quickly
+  while staying productive is challenging. This challenge is
+  multiplied by unfamiliarity with [[https://en.wikipedia.org/wiki/Model%25E2%2580%2593view%25E2%2580%2593controller][MVC]]/[[https://en.wikipedia.org/wiki/Model%25E2%2580%2593view%25E2%2580%2593presenter][MVP]] web frameworks.
+
+  A couple hours in we sat down and decided Django had to go. We
+  realized two of us had prior experience with [[https://palletsprojects.com/p/flask/][Flask]]. Combined with
+  [[https://www.flaskapi.org/][flaskapi]] this could be a wonderfully simple way to build a RESTful
+  API backend.
+
+  For the frontend we used [[https://create-react-app.dev/][Create React App]]. I did not work with it
+  much, but I found it easy to run, deploy, and tweak. I think it was
+  a solid choice.
+
+  The hardest part of our stack was integrating our hand-rolled RESTful
+  API into the React.js based frontend. In fact we weren't able to
+  complete this, but we got really close. It was a lot of work to get
+  as far as we did as a team.
+  
+  Most of the other groups also used Python. Multiple groups used
+  Django, and one group even used [[https://www.django-rest-framework.org/][Django Rest Framework]]. They
+  appeared to be facing the same challenge we were having with getting
+  Django to do anything productive in the allotted time. I know at my
+  next hackathon I won't be recommending Django to the uninitiated.
+
+  The winning team used [[https://firebase.google.com/][Firebase]]. Every project I've seen done in
+  Firebase was rapidly prototyped, indicating it is extremely suitable
+  for hackathons. I have [[https://www.gnu.org/philosophy/who-does-that-server-really-serve.html][deep reservations]] about using a proprietary
+  PaaS, but maybe I can put this concern aside for my next
+  hackathon. :)
+
+  Java. At my university and most others in my area, Java is the first
+  language we learn. In some cases it may be the only language one
+  really learns well. In this light, a team member mentioned perhaps we
+  could use [[https://tomcat.apache.org/][Tomcat]] or some other Java web framework in future. This
+  seems like a superb idea, I hope to explore this in an upcoming
+  project with classmates.
+
+* Debian surprised me (again)
+
+  A funny experience during the hackathon was discovering a rather
+  surprising patch Debian's virtualenv package ships. On CentOS 7,
+  Gentoo, and possibly anything not Debian derived, running ~python3 -m
+  virtualenv ./venv~ will create a Python3 virtual environment. [[https://stackoverflow.com/questions/51534831/python3-virtualenv-installs-python2][This is
+  not the case on Debian]]. Instead Debian [[https://salsa.debian.org/python-team/modules/python-virtualenv/blob/master/debian/patches/python2-default.patch][will always default to
+  installing =python2=]] in the virtual environment. One must pass =-p
+  python3= to install python3. Sure seems wonky to me!
+
+
+* Demos never work
+
+  We almost had a working demo, but the part that got us was
+  deployment. I spun up a [[https://www.vultr.com/][Vultr]] VPS, installed npm, node, caddy,
+  virtualenv. I got the API backend running, and built the Create
+  React App pages, and tied it all together with a Caddyfile, but it
+  simply wouldn't work. There was too many moving parts, and manual
+  deployment was too tedious to get right within the time frame.
+
+  There is something to be said for working in
+  containerized workflows; this would have been a non-issue. Drop in a
+  =docker-compose.yml= into the project and just run ~docker-compose
+  up~. Next time :)
+
+* Teamwork is essential
+
+  We had a team of eight members, and it was challenging to find
+  tasks for everybody. Given we had two major components --- frontend
+  and backend --- and we had quite a few members who needed
+  instruction to get started, it was challenging to give both the
+  coding and instructing enough attention. In future I strive to have
+  more balanced teams so everybody can feel more involved. Perhaps a
+  good rule of thumb is to pair at most one beginner to one
+  intermediate, never more than one.
+
+  Something else I think that will help is ensure nobody gets
+  pigeonholed into managing the project; rather, share the
+  responsibility. Project managers are likely not effective in a
+  half-day Hackathon.
+
+  Keep morale up. Don't let negativity distract from the team
+  tasks. Redirect negativity into going for a walk, playing video
+  games, or simply taking a break. Make sure to smile.
+
+* Conclusion
+
+  I had fun at GDG Milwaukee DevFest. Good food, good company. We
+  found our initial choice of Django was not productive in true
+  hackathon spirit. Flask was better for this. Maybe next time we'll
+  consider Firebase. If I had a nickle for every Debian patch that
+  violated my own idea of least surprise, I'd have laundry
+  money. Demos are hard, deployments should be automated or otherwise
+  streamlined. Finally, teamwork is vital. Keep the team small, and
+  make sure everybody has things to do.
+
+  See you next year GDG.

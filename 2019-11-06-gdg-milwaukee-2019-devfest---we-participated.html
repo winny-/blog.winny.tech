@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://blog.winny.tech/rss.xml"
+      title="RSS feed for https://blog.winny.tech/"/>
+<title>GDG Milwaukee 2019 DevFest - We participated!</title>
+
+<link href="static/style.css?v=1.4" rel="stylesheet" type="text/css" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+
+<nav>
+<div class="flexcontainer">
+<div class="smallitem">
+blog.winny.tech
+</div>
+<div class="bigitem">
+<ul class="inline-list">
+<li><a href=".">Home</a></li>
+<li><a href="archive.html">Archive</a></li>
+<li><a href="tags.html">Tags</a></li>
+<li><a href="rss.xml">RSS Feed</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<hr/>
+</div>
+<div id="content">
+<div class="post-date">06 Nov 2019</div><h1 class="post-title"><a href="2019-11-06-gdg-milwaukee-2019-devfest---we-participated.html">GDG Milwaukee 2019 DevFest - We participated!</a></h1>
+<p>
+I attended the <a href="https://www.meetup.com/GDG-UWM/events/264945191/">GDG Milwaukee 2019 DevFest</a> last Saturday. This was my
+second hackathon. Around 6-9 teams participated. We coded for six
+hours, and I learned a lot about team dynamics. We formed a team of eight
+participants. We encountered a couple significant challenges.
+</p>
+
+<div id="outline-container-org8de4fc9" class="outline-2">
+<h2 id="org8de4fc9">The stack matters</h2>
+<div class="outline-text-2" id="text-org8de4fc9">
+<p>
+Initially we decided to use Python and the <a href="https://www.djangoproject.com/">Django framework</a>. This
+turned out to be a grave error, because picking up Django quickly
+while staying productive is challenging. This challenge is
+multiplied by unfamiliarity with <a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC</a>/<a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter">MVP</a> web frameworks.
+</p>
+
+<p>
+A couple hours in we sat down and decided Django had to go. We
+realized two of us had prior experience with <a href="https://palletsprojects.com/p/flask/">Flask</a>. Combined with
+<a href="https://www.flaskapi.org/">flaskapi</a> this could be a wonderfully simple way to build a RESTful
+API backend.
+</p>
+
+<p>
+For the frontend we used <a href="https://create-react-app.dev/">Create React App</a>. I did not work with it
+much, but I found it easy to run, deploy, and tweak. I think it was
+a solid choice.
+</p>
+
+<p>
+The hardest part of our stack was integrating our hand-rolled RESTful
+API into the React.js based frontend. In fact we weren't able to
+complete this, but we got really close. It was a lot of work to get
+as far as we did as a team.
+</p>
+
+<p>
+Most of the other groups also used Python. Multiple groups used
+Django, and one group even used <a href="https://www.django-rest-framework.org/">Django Rest Framework</a>. They
+appeared to be facing the same challenge we were having with getting
+Django to do anything productive in the allotted time. I know at my
+next hackathon I won't be recommending Django to the uninitiated.
+</p>
+
+<p>
+The winning team used <a href="https://firebase.google.com/">Firebase</a>. Every project I've seen done in
+Firebase was rapidly prototyped, indicating it is extremely suitable
+for hackathons. I have <a href="https://www.gnu.org/philosophy/who-does-that-server-really-serve.html">deep reservations</a> about using a proprietary
+PaaS, but maybe I can put this concern aside for my next
+hackathon. :)
+</p>
+
+<p>
+Java. At my university and most others in my area, Java is the first
+language we learn. In some cases it may be the only language one
+really learns well. In this light, a team member mentioned perhaps we
+could use <a href="https://tomcat.apache.org/">Tomcat</a> or some other Java web framework in future. This
+seems like a superb idea, I hope to explore this in an upcoming
+project with classmates.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org878c6bd" class="outline-2">
+<h2 id="org878c6bd">Debian surprised me (again)</h2>
+<div class="outline-text-2" id="text-org878c6bd">
+<p>
+A funny experience during the hackathon was discovering a rather
+surprising patch Debian's virtualenv package ships. On CentOS 7,
+Gentoo, and possibly anything not Debian derived, running <code>python3 -m
+  virtualenv ./venv</code> will create a Python3 virtual environment. <a href="https://stackoverflow.com/questions/51534831/python3-virtualenv-installs-python2">This is
+not the case on Debian</a>. Instead Debian <a href="https://salsa.debian.org/python-team/modules/python-virtualenv/blob/master/debian/patches/python2-default.patch">will always default to
+installing <code>python2</code></a> in the virtual environment. One must pass <code>-p
+  python3</code> to install python3. Sure seems wonky to me!
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orgb3f173e" class="outline-2">
+<h2 id="orgb3f173e">Demos never work</h2>
+<div class="outline-text-2" id="text-orgb3f173e">
+<p>
+We almost had a working demo, but the part that got us was
+deployment. I spun up a <a href="https://www.vultr.com/">Vultr</a> VPS, installed npm, node, caddy,
+virtualenv. I got the API backend running, and built the Create
+React App pages, and tied it all together with a Caddyfile, but it
+simply wouldn't work. There was too many moving parts, and manual
+deployment was too tedious to get right within the time frame.
+</p>
+
+<p>
+There is something to be said for working in
+containerized workflows; this would have been a non-issue. Drop in a
+<code>docker-compose.yml</code> into the project and just run <code>docker-compose
+  up</code>. Next time :)
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc300986" class="outline-2">
+<h2 id="orgc300986">Teamwork is essential</h2>
+<div class="outline-text-2" id="text-orgc300986">
+<p>
+We had a team of eight members, and it was challenging to find
+tasks for everybody. Given we had two major components &#x2014; frontend
+and backend &#x2014; and we had quite a few members who needed
+instruction to get started, it was challenging to give both the
+coding and instructing enough attention. In future I strive to have
+more balanced teams so everybody can feel more involved. Perhaps a
+good rule of thumb is to pair at most one beginner to one
+intermediate, never more than one.
+</p>
+
+<p>
+Something else I think that will help is ensure nobody gets
+pigeonholed into managing the project; rather, share the
+yoke. Project managers are likely not effective in a half-day
+Hackathon.
+</p>
+
+<p>
+Keep morale up. Don't let negativity distract from the team
+tasks. Redirect negativity into taking breaks, go for a walk,
+whatever. Just keep it away from the work tables.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf5a3265" class="outline-2">
+<h2 id="orgf5a3265">Conclusion</h2>
+<div class="outline-text-2" id="text-orgf5a3265">
+<p>
+I had fun at GDG Milwaukee DevFest. Good food, good company. We
+found our initial choice of Django was not productive in true
+hackathon spirit. Flask was better for this. Maybe next time we'll
+consider Firebase. If I had a nickle for every Debian patch that
+violated my own idea of least surprise, I'd have laundry
+money. Demos are hard, deployments should be automated or otherwise
+streamlined. Finally, teamwork is vital. Keep the team small, and
+make sure everybody has things to do.
+</p>
+
+<p>
+See you next year GDG.
+</p>
+</div>
+</div>
+<div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-community.html">community</a> </div></div>
+<div id="postamble" class="status">
+<hr/>
+<ul class="inline-list interpunct">
+<li>Powered by <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a></li>
+<li>Like what I do? <a href="https://www.buymeacoffee.com/winny">Buy me a Coffee</a></li>
+</ul>
+</div>
+</body>
+</html>
