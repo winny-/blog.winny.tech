@@ -1,0 +1,142 @@
+#+title: Won MSOE x Google Cloud Hackathon
+#+date: <2019-11-18 20:49>
+#+filetags: community
+#+options: toc:nil num:nil ':t
+
+About a fortnight ago (Nov 9th) I went to the MSOE x Google Cloud
+hackathon.[fn:2] There was pizza, soda, and Google Cloud gear. Each group
+was given a [[https://aiyprojects.withgoogle.com/vision][Google AIY Computer Vision kit]] to assemble, and build a
+proof of concept around.
+
+The kit contained a [[https://www.adafruit.com/product/3400][Raspberry Pi Zero W]], the [[https://www.adafruit.com/product/3099][Raspberry Pi Camera
+Add-on]], a breakout board to provide simplified pin-outs for a button
+with an integrated light, an additional LED that mounted next to the
+camera to indicate if the camera was active, and a piezo buzzer.[fn:1] All
+these components fit into a carefully engineered cardboard box that
+folded onto itself, held together with adhesive tape. The assembled
+device was remarkably robust and easy to operate.
+
+* Challenges
+
+  We were among the first group to finish building the kit. It turned
+  out the software on the included SD card was not exactly what we
+  needed, and the SD card writing software for Windows ([[https://etcher.io/][Etcher]]) was a
+  bit unreliable and did not clearly indicate to the user of a
+  successful write. After a second attempt we had bootable SD card.
+
+  The system took a couple minutes to boot and resize itself. Mind
+  you, we did not have a Mini-HDMI to HDMI cable, nor a monitor to
+  output the Raspberry Pi display. Thus we had to wait, chat, and eat
+  pizza.
+
+  The next challenge was to "pair" the device with a wifi network so
+  one could SSH into it. There is an android app for this, and at
+  first we paired it with a spare android device acting as a
+  hotspot. Unfortunately this configuration did not give us internet
+  access when connected to this wireless access point. We were able to
+  verify the device was working, SSH in, and inspect the images we
+  took via the kit's included camera.
+
+  We moved to a more central location, as the most cognitively
+  demanding part was complete --- construction of the device, and
+  ensuring it works. This lead to more networking challenge. We wanted
+  a way to network this device to the internet so we could not only
+  log into it via SSH, but access PyPi from the device, and access
+  StackOverflow from our laptops on the same network. With a little
+  brainstroming we came up with this network topology:
+
+  [[file:static/image/msoe-network-topology.png]]
+
+  Yes, as you can see the path from the internet is (A) public wifi
+  (B) my friend Karl's android phone (C) his laptop via bluetooth
+  tethering (D) finally a wifi network via his laptop's built in
+  wifi. We had an intemittent hiccup with nameserver configuration not
+  set up correctly on the host wifi network — as such any DNS would
+  not resolve. A quick tweak to Karl's network manager settings
+  mitigated this. And like that… we were networked together on a
+  private wifi network complete with internet access.
+
+  There were some other techincal issues. Because of our network
+  topology, the round trip time to the internet was very high,
+  occasionally over a second from the pi, and pip has a relatively low
+  timeout when installing stuff. The workaround was to [[https://stackoverflow.com/questions/43298872/][tell pip to
+  calm down, and be patient]]. I had installed tmux so we could share a
+  session across the table (for pair programming), and the apt man-db
+  triggers [[https://askubuntu.com/a/1064366/436920][took around 5-15 minutes]]; with the crunch time we had, this
+  felt unacceptable. The other technical issue we had was the fact the
+  raspbian image starts up a lot of unnecessary services by default
+  which eat into the rasperry pi zero w's very limited memory. This
+  caused pip to crash due to failure to allocate memory. We had to
+  disable lightdm (GUI) and the default vision kit demo. Had this been
+  a device I'd use for more than a couple hours, I'd go through and
+  disable things like GIO services, and other bloat that we never
+  would use.[fn:3]
+
+  Meanwhile our other two group members worked on a proof of concept
+  game. The idea the device comes up with a common word, and the user
+  carries the device around, showing it various text on the wall or on
+  paper. Using a cloud [[https://en.wikipedia.org/wiki/Optical_character_recognition][OCR]] service, it can recognize the
+  words seen by the camera. It then will buzz happily when it is shown
+  the correct word, or buzz sadly if shown the wrong word. Then the
+  process repeats. It's an "iSpy" with computer vision and words — a
+  word hunt!
+
+* Completion
+
+  While our PoC was not deployed in time for presentations, we were
+  about five to ten minutes away from setting it up, and demoing
+  it. During the presentations, we found that many of the other groups
+  experienced the same issues with the Google AIY Vision Kit — due to
+  the Raspberry Pi platform, Raspbian, and the way one pairs it to
+  wifi. At least one other group managed to get some non-default code
+  running on their Pi. We were only given around 3-4 hours from start
+  to finish, with a time loss factor due to slow internet speeds to
+  download the initial SD card image, man-db triggers rendering the
+  device unusable for awhile, and dealing with the lack of suitable
+  networking configuration.
+
+  Given all these challenges, I think we did very well. As did every
+  other group that participated. We did have competition for 1st
+  place, because some of the other groups had PoC's (though some did
+  not get the Pi completely working) and others did get the Pi working
+  but did not have a PoC. We were selected as 1st place, and each was
+  given either a [[https://store.google.com/product/google_home_mini][Google Home Mini]] or a Google Cloud hoodie. I went
+  with the hoodie because I don't want to use Google's [[https://support.google.com/googlenest/answer/7072285?hl=en][creepy]] [[https://www.youtube.com/watch?v=AAP4N3KyLmM][spyware]]
+  voice assistant. And the modding/reverse engineering community has
+  done very little with this product; nobody has loaded custom
+  firmware on it, for example.
+
+* Conclusion
+
+  Our issue in seeking out a usable networking topology had be thinking:
+  if I simply had a device with two wifi radios, I could run one as an
+  Acesss Point and the other connected to Public WiFi. This device would
+  then yield this topology, which would be ideal for these sorts of
+  impromptu projects and activities:
+
+  [[file:static/dual-wifi.png]]
+
+  In addition, it would be perfect for demonstrations of man in the
+  middle attacks on public wifi, or experimenting with multipath tcp and
+  wifi.
+
+  With these sorts of events that start early on a Saturday morning,
+  it's been useful to agree with a friend to attend the same event. That
+  way both parties are more likely to show up, because it wouldn't be
+  very personable to cancel last minute. We also had a wonderful team. I
+  later met up with most of the same team for another event (post
+  incoming). Hackathons are a great way to meet new people. I enjoyed
+  this event thoroughly.
+
+  See you at the next hackathon :)
+
+* Footnotes
+
+[fn:3] Stay tuned as I explore why I find distros like Debian not
+ideal in practice in a future post ☺
+
+[fn:2] There isn't a link online yet :(. I will update this note when
+I find *a link* to the event.
+
+[fn:1] Full list of materials [[https://aiyprojects.withgoogle.com/vision#list-of-materials][here]].
+

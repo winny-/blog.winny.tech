@@ -4,7 +4,208 @@
 <title><![CDATA[blog.winny.tech]]></title>
 <description><![CDATA[blog.winny.tech]]></description>
 <link>https://blog.winny.tech/</link>
-<lastBuildDate>Wed, 06 Nov 2019 04:31:44 -0600</lastBuildDate>
+<lastBuildDate>Mon, 18 Nov 2019 21:51:11 -0600</lastBuildDate>
+<item>
+  <title><![CDATA[Won MSOE x Google Cloud Hackathon]]></title>
+  <description><![CDATA[
+<p>
+About a fortnight ago (Nov 9th) I went to the MSOE x Google Cloud
+hackathon.<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> There was pizza, soda, and Google Cloud gear. Each group
+was given a <a href="https://aiyprojects.withgoogle.com/vision">Google AIY Computer Vision kit</a> to assemble, and build a
+proof of concept around.
+</p>
+
+<p>
+The kit contained a <a href="https://www.adafruit.com/product/3400">Raspberry Pi Zero W</a>, the <a href="https://www.adafruit.com/product/3099">Raspberry Pi Camera
+Add-on</a>, a breakout board to provide simplified pin-outs for a button
+with an integrated light, an additional LED that mounted next to the
+camera to indicate if the camera was active, and a piezo buzzer.<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> All
+these components fit into a carefully engineered cardboard box that
+folded onto itself, held together with adhesive tape. The assembled
+device was remarkably robust and easy to operate.
+</p>
+
+<div id="outline-container-orgb252b0e" class="outline-2">
+<h2 id="orgb252b0e">Challenges</h2>
+<div class="outline-text-2" id="text-orgb252b0e">
+<p>
+We were among the first group to finish building the kit. It turned
+out the software on the included SD card was not exactly what we
+needed, and the SD card writing software for Windows (<a href="https://etcher.io/">Etcher</a>) was a
+bit unreliable and did not clearly indicate to the user of a
+successful write. After a second attempt we had bootable SD card.
+</p>
+
+<p>
+The system took a couple minutes to boot and resize itself. Mind
+you, we did not have a Mini-HDMI to HDMI cable, nor a monitor to
+output the Raspberry Pi display. Thus we had to wait, chat, and eat
+pizza.
+</p>
+
+<p>
+The next challenge was to &ldquo;pair&rdquo; the device with a wifi network so
+one could SSH into it. There is an android app for this, and at
+first we paired it with a spare android device acting as a
+hotspot. Unfortunately this configuration did not give us internet
+access when connected to this wireless access point. We were able to
+verify the device was working, SSH in, and inspect the images we
+took via the kit&rsquo;s included camera.
+</p>
+
+<p>
+We moved to a more central location, as the most cognitively
+demanding part was complete &#x2014; construction of the device, and
+ensuring it works. This lead to more networking challenge. We wanted
+a way to network this device to the internet so we could not only
+log into it via SSH, but access PyPi from the device, and access
+StackOverflow from our laptops on the same network. With a little
+brainstroming we came up with this network topology:
+</p>
+
+
+<figure>
+<img src="static/image/msoe-network-topology.png" alt="msoe-network-topology.png">
+
+</figure>
+
+<p>
+Yes, as you can see the path from the internet is (A) public wifi
+(B) my friend Karl&rsquo;s android phone (C) his laptop via bluetooth
+tethering (D) finally a wifi network via his laptop&rsquo;s built in
+wifi. We had an intemittent hiccup with nameserver configuration not
+set up correctly on the host wifi network — as such any DNS would
+not resolve. A quick tweak to Karl&rsquo;s network manager settings
+mitigated this. And like that… we were networked together on a
+private wifi network complete with internet access.
+</p>
+
+<p>
+There were some other techincal issues. Because of our network
+topology, the round trip time to the internet was very high,
+occasionally over a second from the pi, and pip has a relatively low
+timeout when installing stuff. The workaround was to <a href="https://stackoverflow.com/questions/43298872/">tell pip to
+calm down, and be patient</a>. I had installed tmux so we could share a
+session across the table (for pair programming), and the apt man-db
+triggers <a href="https://askubuntu.com/a/1064366/436920">took around 5-15 minutes</a>; with the crunch time we had, this
+felt unacceptable. The other technical issue we had was the fact the
+raspbian image starts up a lot of unnecessary services by default
+which eat into the rasperry pi zero w&rsquo;s very limited memory. This
+caused pip to crash due to failure to allocate memory. We had to
+disable lightdm (GUI) and the default vision kit demo. Had this been
+a device I&rsquo;d use for more than a couple hours, I&rsquo;d go through and
+disable things like GIO services, and other bloat that we never
+would use.<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>
+</p>
+
+<p>
+Meanwhile our other two group members worked on a proof of concept
+game. The idea the device comes up with a common word, and the user
+carries the device around, showing it various text on the wall or on
+paper. Using a cloud <a href="https://en.wikipedia.org/wiki/Optical_character_recognition">OCR</a> service, it can recognize the
+words seen by the camera. It then will buzz happily when it is shown
+the correct word, or buzz sadly if shown the wrong word. Then the
+process repeats. It&rsquo;s an &ldquo;iSpy&rdquo; with computer vision and words — a
+word hunt!
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf2cf947" class="outline-2">
+<h2 id="orgf2cf947">Completion</h2>
+<div class="outline-text-2" id="text-orgf2cf947">
+<p>
+While our PoC was not deployed in time for presentations, we were
+about five to ten minutes away from setting it up, and demoing
+it. During the presentations, we found that many of the other groups
+experienced the same issues with the Google AIY Vision Kit — due to
+the Raspberry Pi platform, Raspbian, and the way one pairs it to
+wifi. At least one other group managed to get some non-default code
+running on their Pi. We were only given around 3-4 hours from start
+to finish, with a time loss factor due to slow internet speeds to
+download the initial SD card image, man-db triggers rendering the
+device unusable for awhile, and dealing with the lack of suitable
+networking configuration.
+</p>
+
+<p>
+Given all these challenges, I think we did very well. As did every
+other group that participated. We did have competition for 1st
+place, because some of the other groups had PoC&rsquo;s (though some did
+not get the Pi completely working) and others did get the Pi working
+but did not have a PoC. We were selected as 1st place, and each was
+given either a <a href="https://store.google.com/product/google_home_mini">Google Home Mini</a> or a Google Cloud hoodie. I went
+with the hoodie because I don&rsquo;t want to use Google&rsquo;s <a href="https://support.google.com/googlenest/answer/7072285?hl=en">creepy</a> <a href="https://www.youtube.com/watch?v=AAP4N3KyLmM">spyware</a>
+voice assistant. And the modding/reverse engineering community has
+done very little with this product; nobody has loaded custom
+firmware on it, for example.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc095bdb" class="outline-2">
+<h2 id="orgc095bdb">Conclusion</h2>
+<div class="outline-text-2" id="text-orgc095bdb">
+<p>
+Our issue in seeking out a usable networking topology had be thinking:
+if I simply had a device with two wifi radios, I could run one as an
+Acesss Point and the other connected to Public WiFi. This device would
+then yield this topology, which would be ideal for these sorts of
+impromptu projects and activities:
+</p>
+
+
+<figure>
+<img src="static/dual-wifi.png" alt="dual-wifi.png">
+
+</figure>
+
+<p>
+In addition, it would be perfect for demonstrations of man in the
+middle attacks on public wifi, or experimenting with multipath tcp and
+wifi.
+</p>
+
+<p>
+With these sorts of events that start early on a Saturday morning,
+it&rsquo;s been useful to agree with a friend to attend the same event. That
+way both parties are more likely to show up, because it wouldn&rsquo;t be
+very personable to cancel last minute. We also had a wonderful team. I
+later met up with most of the same team for another event (post
+incoming). Hackathons are a great way to meet new people. I enjoyed
+this event thoroughly.
+</p>
+
+<p>
+See you at the next hackathon :)
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+There isn&rsquo;t a link online yet :(. I will update this note when
+I find <b>a link</b> to the event.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+Full list of materials <a href="https://aiyprojects.withgoogle.com/vision#list-of-materials">here</a>.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+Stay tuned as I explore why I find distros like Debian not
+ideal in practice in a future post ☺
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-community.html">community</a> </div>]]></description>
+  <category><![CDATA[community]]></category>
+  <link>https://blog.winny.tech/2019-11-18-won-msoe-x-google-cloud-hackathon.html</link>
+  <pubDate>Mon, 18 Nov 2019 20:49:00 -0600</pubDate>
+</item>
 <item>
   <title><![CDATA[GDG Milwaukee 2019 DevFest - We participated!]]></title>
   <description><![CDATA[
@@ -15,9 +216,9 @@ hours, and I learned a lot about team dynamics. We formed a team of eight
 participants. We encountered a couple significant challenges.
 </p>
 
-<div id="outline-container-org8de4fc9" class="outline-2">
-<h2 id="org8de4fc9">The stack matters</h2>
-<div class="outline-text-2" id="text-org8de4fc9">
+<div id="outline-container-org7c49b1e" class="outline-2">
+<h2 id="org7c49b1e">The stack matters</h2>
+<div class="outline-text-2" id="text-org7c49b1e">
 <p>
 Initially we decided to use Python and the <a href="https://www.djangoproject.com/">Django framework</a>. This
 turned out to be a grave error, because picking up Django quickly
@@ -72,9 +273,9 @@ project with classmates.
 </div>
 </div>
 
-<div id="outline-container-org878c6bd" class="outline-2">
-<h2 id="org878c6bd">Debian surprised me (again)</h2>
-<div class="outline-text-2" id="text-org878c6bd">
+<div id="outline-container-org3201ba3" class="outline-2">
+<h2 id="org3201ba3">Debian surprised me (again)</h2>
+<div class="outline-text-2" id="text-org3201ba3">
 <p>
 A funny experience during the hackathon was discovering a rather
 surprising patch Debian's virtualenv package ships. On CentOS 7,
@@ -88,9 +289,9 @@ installing <code>python2</code></a> in the virtual environment. One must pass <c
 </div>
 
 
-<div id="outline-container-orgb3f173e" class="outline-2">
-<h2 id="orgb3f173e">Demos never work</h2>
-<div class="outline-text-2" id="text-orgb3f173e">
+<div id="outline-container-org196ff90" class="outline-2">
+<h2 id="org196ff90">Demos never work</h2>
+<div class="outline-text-2" id="text-org196ff90">
 <p>
 We almost had a working demo, but the part that got us was
 deployment. I spun up a <a href="https://www.vultr.com/">Vultr</a> VPS, installed npm, node, caddy,
@@ -109,9 +310,9 @@ containerized workflows; this would have been a non-issue. Drop in a
 </div>
 </div>
 
-<div id="outline-container-orgc300986" class="outline-2">
-<h2 id="orgc300986">Teamwork is essential</h2>
-<div class="outline-text-2" id="text-orgc300986">
+<div id="outline-container-orgf194fec" class="outline-2">
+<h2 id="orgf194fec">Teamwork is essential</h2>
+<div class="outline-text-2" id="text-orgf194fec">
 <p>
 We had a team of eight members, and it was challenging to find
 tasks for everybody. Given we had two major components &#x2014; frontend
@@ -126,21 +327,21 @@ intermediate, never more than one.
 <p>
 Something else I think that will help is ensure nobody gets
 pigeonholed into managing the project; rather, share the
-yoke. Project managers are likely not effective in a half-day
-Hackathon.
+responsibility. Project managers are likely not effective in a
+half-day Hackathon.
 </p>
 
 <p>
 Keep morale up. Don't let negativity distract from the team
-tasks. Redirect negativity into taking breaks, go for a walk,
-whatever. Just keep it away from the work tables.
+tasks. Redirect negativity into going for a walk, playing video
+games, or simply taking a break. Make sure to smile.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgf5a3265" class="outline-2">
-<h2 id="orgf5a3265">Conclusion</h2>
-<div class="outline-text-2" id="text-orgf5a3265">
+<div id="outline-container-org20a58e6" class="outline-2">
+<h2 id="org20a58e6">Conclusion</h2>
+<div class="outline-text-2" id="text-org20a58e6">
 <p>
 I had fun at GDG Milwaukee DevFest. Good food, good company. We
 found our initial choice of Django was not productive in true
@@ -176,9 +377,9 @@ operation. Unfortunately this meant I could not do one of the simplest
 operations in Emacs - visiting files and directories.
 </p>
 
-<div id="outline-container-org392eaf4" class="outline-2">
-<h2 id="org392eaf4">Enter <code>debug-on-quit</code></h2>
-<div class="outline-text-2" id="text-org392eaf4">
+<div id="outline-container-org7fd5f29" class="outline-2">
+<h2 id="org7fd5f29">Enter <code>debug-on-quit</code></h2>
+<div class="outline-text-2" id="text-org7fd5f29">
 <p>
 After some searching <a href="https://www.gnu.org/software/emacs/manual/html_node/eintr/Debugging.html#Debugging">I found</a> the <code>debug-on-quit</code> and <code>debug-on-error</code>
 variables<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>, with their corresponding commands <code>toggle-debug-on-quit</code>
@@ -224,9 +425,9 @@ documented somewhere now.
 </div>
 </div>
 
-<div id="outline-container-org020037f" class="outline-2">
-<h2 id="org020037f">Don't forget about <code>debug-on-error</code></h2>
-<div class="outline-text-2" id="text-org020037f">
+<div id="outline-container-orga90ec66" class="outline-2">
+<h2 id="orga90ec66">Don't forget about <code>debug-on-error</code></h2>
+<div class="outline-text-2" id="text-orga90ec66">
 <p>
 <code>debug-on-error</code> is also extremely useful, especially when extending
 Emacs with your own Elisp code. When I write Elisp, I almost always
