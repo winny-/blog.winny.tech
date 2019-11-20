@@ -1,3 +1,5 @@
 * blog.winny.tech
 
   Powered by [[https://github.com/bastibe/org-static-blog/][org-static-blog]].
+
+  Licensed [[file:LICENSE.txt][CC-BY-SA-4.0]].

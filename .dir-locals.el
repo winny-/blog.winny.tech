@@ -7,7 +7,7 @@
          (org-static-blog-enable-tags . t)
          (org-export-with-toc . nil)
          (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.4\" rel=\"stylesheet\" type=\"text/css\" />
+<link href=\"static/style.css?v=1.5\" rel=\"stylesheet\" type=\"text/css\" />
 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
 ")
          (org-static-blog-page-preamble . "
@@ -34,4 +34,5 @@ blog.winny.tech
 <li>Powered by <a href=\"https://github.com/bastibe/org-static-blog\">org-static-blog</a></li>
 <li>Like what I do? <a href=\"https://www.buymeacoffee.com/winny\">Buy me a Coffee</a></li>
 </ul>
+<p>© Winston Weinert (winny) — <a href=\"https://creativecommons.org/licenses/by-sa/4.0/legalcode\">CC-BY-SA-4.0</a></p>
 "))))
