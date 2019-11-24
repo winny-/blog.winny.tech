@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://blog.winny.tech/rss.xml"
+      title="RSS feed for https://blog.winny.tech/"/>
+<title>Milwaukee Code Camp</title>
+
+<link href="static/style.css?v=1.5" rel="stylesheet" type="text/css" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div id="preamble" class="status">
+
+<nav>
+<div class="flexcontainer">
+<div class="smallitem">
+blog.winny.tech
+</div>
+<div class="bigitem">
+<ul class="inline-list">
+<li><a href=".">Home</a></li>
+<li><a href="archive.html">Archive</a></li>
+<li><a href="tags.html">Tags</a></li>
+<li><a href="rss.xml">RSS Feed</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<hr/>
+</div>
+<div id="content">
+<div class="post-date">23 Nov 2019</div><h1 class="post-title"><a href="2019-11-23-milwaukee-code-camp.html">Milwaukee Code Camp</a></h1>
+<p>
+This most recent weekend (November 16th) I attended the <a href="https://www.milwaukeecodecamp.com/">Milwaukee Code
+Camp</a> and was pleased with the content. There was plenty of food,
+coffee, and give-aways.
+</p>
+
+<div id="outline-container-orgbb1fcb5" class="outline-2">
+<h2 id="orgbb1fcb5">The Talks</h2>
+<div class="outline-text-2" id="text-orgbb1fcb5">
+<p>
+I attended five talks:
+</p>
+
+<ol class="org-ol">
+<li>starting an open source project (<a href="https://www.milwaukeecodecamp.com/session/details/1217">link</a>) <sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>,</li>
+<li>how to manage work life balance as a software developer (<a href="https://www.milwaukeecodecamp.com/session/details/1210">link</a>),</li>
+<li>getting started with <a href="https://docs.docker.com/engine/docker-overview/">Docker</a> and <a href="https://kubernetes.io">Kubernetes</a><sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> (<a href="https://www.milwaukeecodecamp.com/session/details/1212">link</a>),</li>
+<li>introduction to <a href="https://www.terraform.io/">Terraform</a> for cloud infrastructure management (<a href="https://www.milwaukeecodecamp.com/Session/Details/1205">link</a>),</li>
+<li>and accessibility (a11y) on the modern web (<a href="https://www.milwaukeecodecamp.com/session/details/1234">link</a>).</li>
+</ol>
+
+<p>
+I am pleased to say the open source fellow recommended GPLv3, MIT/X,
+and Apache 2.0 (and <a href="https://choosealicense.com/">choosealicense.com</a>), so I have a lot of respect
+for him. I think a lesser open source evangelist would recommend one
+license, or strongly recommend one license. It really does depend on
+your project.
+</p>
+
+<p>
+I was able to get <a href="https://github.com/kubernetes/minikube">Minikube</a> set up during the Docker/k8s talk in five
+minutes. No surprises when installing it from the official Gentoo
+repository. Just follow the installed readme, run the commands… it's
+really quite easy to do. A friend commented it wasn't so simple on
+their system to install Minikube and get it working.
+</p>
+
+<p>
+While I don't think I would use Terraform at this point, I have a
+good appreciation for when I might use it in the future. In
+addition, I found a <a href="https://github.com/dmacvicar/terraform-provider-libvirt">Terraform provider for libvirt</a>, so one could in
+theory provision their own cloud infrastructure on a simple libvirt
+cluster with Terraform. I believe this might be my first use-case
+for Terraform.
+</p>
+
+<p>
+It was refreshing to see people talking about accessibility and the
+web. I am personally not a fan of the web stack for various
+reasons.<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> But the reality is the technology won't go away, and the
+browser is the greatest common denominator both reaching users and
+simplifying the a project's platform support matrix. It was great to
+hear from somebody in industry "your website should be <b>somewhat</b>
+usable without javascript". I am really pleased to hear this; perhaps
+there is hope for the web ecosystem yet.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbb34c03" class="outline-2">
+<h2 id="orgbb34c03">The Food</h2>
+<div class="outline-text-2" id="text-orgbb34c03">
+<p>
+Sweet pastries, water, soda, coffee were available in the
+morning ad throughout the day. There may have been more
+comprehensive breakfast items (cereal?), though I was late for the
+first session. Lunch was Dominos pizza and brownies. There was no
+shortage of pizza. The coffee was catered from Panera Bread.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org877f14d" class="outline-2">
+<h2 id="org877f14d">Conclusion</h2>
+<div class="outline-text-2" id="text-org877f14d">
+<p>
+In addition to learning about Terraform, Kubernetes, and
+accessibility, I met a lot of cool people. I think this event was an
+overwhelming success. Thanks to everybody who organized this event.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+Slides <a href="https://github.com/NickSchweitzer/Presentations">here</a>.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+See the example Docker-ized and Kubernetes-ized application on
+BitBucket <a href="https://bitbucket.org/Bolbeck/mkecodecampnodemysql/src/master/">here</a>.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+This is a discussion in itself. For example: I think a large
+majority of the user and developer experience with web technologies
+does not adhere to the <a href="https://en.wikipedia.org/wiki/Principle_of_least_astonishment">principle of least surprise</a>, making it very
+frustrating for everyone involved.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-community.html">community</a> </div></div>
+<div id="postamble" class="status">
+<hr/>
+<ul class="inline-list interpunct">
+<li>Powered by <a href="https://github.com/bastibe/org-static-blog">org-static-blog</a></li>
+<li>Like what I do? <a href="https://www.buymeacoffee.com/winny">Buy me a Coffee</a></li>
+</ul>
+<p>© Winston Weinert (winny) — <a href="https://creativecommons.org/licenses/by-sa/4.0/legalcode">CC-BY-SA-4.0</a></p>
+</div>
+</body>
+</html>

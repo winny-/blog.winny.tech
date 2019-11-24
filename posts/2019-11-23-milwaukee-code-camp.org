@@ -1,0 +1,73 @@
+#+title: Milwaukee Code Camp
+#+date: <2019-11-23 20:24>
+#+options: num:nil
+#+filetags: community
+
+This most recent weekend (November 16th) I attended the [[https://www.milwaukeecodecamp.com/][Milwaukee Code
+Camp]] and was pleased with the content. There was plenty of food,
+coffee, and give-aways.
+
+* The Talks
+
+I attended five talks:
+
+1. starting an open source project ([[https://www.milwaukeecodecamp.com/session/details/1217][link]]) [fn:2],
+2. how to manage work life balance as a software developer ([[https://www.milwaukeecodecamp.com/session/details/1210][link]]),
+3. getting started with [[https://docs.docker.com/engine/docker-overview/][Docker]] and [[https://kubernetes.io][Kubernetes]][fn:1] ([[https://www.milwaukeecodecamp.com/session/details/1212][link]]),
+4. introduction to [[https://www.terraform.io/][Terraform]] for cloud infrastructure management ([[https://www.milwaukeecodecamp.com/Session/Details/1205][link]]),
+5. and accessibility (a11y) on the modern web ([[https://www.milwaukeecodecamp.com/session/details/1234][link]]).
+
+I am pleased to say the open source fellow recommended GPLv3, MIT/X,
+and Apache 2.0 (and [[https://choosealicense.com/][choosealicense.com]]), so I have a lot of respect
+for him. I think a lesser open source evangelist would recommend one
+license, or strongly recommend one license. It really does depend on
+your project.
+
+I was able to get [[https://github.com/kubernetes/minikube][Minikube]] set up during the Docker/k8s talk in five
+minutes. No surprises when installing it from the official Gentoo
+repository. Just follow the installed readme, run the commands… it's
+really quite easy to do. A friend commented it wasn't so simple on
+their system to install Minikube and get it working.
+
+While I don't think I would use Terraform at this point, I have a
+good appreciation for when I might use it in the future. In
+addition, I found a [[https://github.com/dmacvicar/terraform-provider-libvirt][Terraform provider for libvirt]], so one could in
+theory provision their own cloud infrastructure on a simple libvirt
+cluster with Terraform. I believe this might be my first use-case
+for Terraform.
+
+It was refreshing to see people talking about accessibility and the
+web. I am personally not a fan of the web stack for various
+reasons.[fn:3] But the reality is the technology won't go away, and the
+browser is the greatest common denominator both reaching users and
+simplifying the a project's platform support matrix. It was great to
+hear from somebody in industry "your website should be *somewhat*
+usable without javascript". I am really pleased to hear this; perhaps
+there is hope for the web ecosystem yet.
+
+* The Food
+
+  Sweet pastries, water, soda, coffee were available in the
+  morning ad throughout the day. There may have been more
+  comprehensive breakfast items (cereal?), though I was late for the
+  first session. Lunch was Dominos pizza and brownies. There was no
+  shortage of pizza. The coffee was catered from Panera Bread.
+
+* Conclusion
+
+  In addition to learning about Terraform, Kubernetes, and
+  accessibility, I met a lot of cool people. I think this event was an
+  overwhelming success. Thanks to everybody who organized this event.
+
+* Footnotes
+
+[fn:3] This is a discussion in itself. For example: I think a large
+majority of the user and developer experience with web technologies
+does not adhere to the [[https://en.wikipedia.org/wiki/Principle_of_least_astonishment][principle of least surprise]], making it very
+frustrating for everyone involved.
+
+[fn:2] Slides [[https://github.com/NickSchweitzer/Presentations][here]].
+
+[fn:1] See the example Docker-ized and Kubernetes-ized application on
+BitBucket [[https://bitbucket.org/Bolbeck/mkecodecampnodemysql/src/master/][here]].
+
