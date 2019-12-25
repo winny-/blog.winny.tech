@@ -8,7 +8,7 @@
       title="RSS feed for https://blog.winny.tech/"/>
 <title>blog.winny.tech</title>
 
-<link href="static/style.css?v=1.5" rel="stylesheet" type="text/css" />
+<link href="static/style.css?v=1.6" rel="stylesheet" type="text/css" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -32,6 +32,268 @@ blog.winny.tech
 </div>
 <div id="content">
 <h1 class="title">Posts tagged "computing":</h1>
+<div class="post-date">25 Dec 2019</div><h1 class="post-title"><a href="2019-12-25-how-to-fix-early-framebuffer-problems,-or-can-i-type-my-disk-password-yet.html">How to fix early framebuffer problems, or "Can I type my disk password yet??"</a></h1>
+<p>
+Most of my workstations &amp; laptops require a passphrase typed in to
+open the encrypted root filesystem. So my steps to booting are as
+follows:
+</p>
+
+<ol class="org-ol">
+<li>Power on machine</li>
+<li>Wait for FDE passphrase prompt</li>
+<li>Type in FDE passphrase</li>
+<li>Wait for boot to complete and automatic XFCE session to start</li>
+</ol>
+
+<p>
+Since I need to know when the computer is ready to accept the
+passphrase, it is important the framebuffer is usable during the early
+part of the boot. In the case of of HP Elitebook 820 G4, the EFI
+framebuffer does not appear to work, and I rather not boot in BIOS
+mode to get a functional VESA framebuffer. Making things more awkward,
+a firmware is needed when the i915 driver is loaded, or the
+framebuffer will not work either. (It&rsquo;s not always clear if a firmware
+is needed, so one should run <code>dmesg | grep -F firmware</code> and check if
+firmware is being loaded.)
+</p>
+
+<p>
+With this information, the problem is summarized to: <b>&ldquo;How do I ensure
+i915 is available at boot with the appropriate firmware?&rdquo;</b>. This
+question can be easily generalized to any framebuffer driver, as the
+steps are more-or-less the same.
+</p>
+
+<div id="outline-container-org27573a4" class="outline-2">
+<h2 id="org27573a4">Zeroth step: Do you need only a driver, or a driver with firmware?</h2>
+<div class="outline-text-2" id="text-org27573a4">
+<p>
+IT is a good idea to verify if your kernel is missing a driver at
+boot, or is missing firmware or both. Boot up a Live USB with good
+hardware compatibility, such as <a href="http://grml.org/">GRML</a><sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> or Ubuntu&rsquo;s, and let&rsquo;s see what
+framebuffer driver our host is trying to use<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>:
+</p>
+
+<pre class="example">
+$ dmesg | grep -i 'frame.*buffer'
+[    4.790570] efifb: framebuffer at 0xe0000000, using 8128k, total 8128k
+[    4.790611] fb0: EFI VGA frame buffer device
+[    4.820637] Console: switching to colour frame buffer device 240x67
+[    6.643895] i915 0000:00:02.0: fb1: i915drmfb frame buffer device
+</pre>
+
+<p>
+Se we can see the efifb is initially used for a couple seconds, then
+i915 is used for the rest of the computer&rsquo;s uptime. Now let&rsquo;s look
+at if firmware is necessary, first checking if <code>modinfo(8)</code> knows of
+any firmware:
+</p>
+
+<pre class="example">
+$ modinfo i915 -F firmware
+i915/bxt_dmc_ver1_07.bin
+i915/skl_dmc_ver1_27.bin
+i915/kbl_dmc_ver1_04.bin
+... SNIP ...
+i915/kbl_guc_33.0.0.bin
+i915/icl_huc_ver8_4_3238.bin
+i915/icl_guc_33.0.0.bin
+</pre>
+
+<p>
+This indicates this driver will load firmware when available, and if
+necessary for the particular mode of operation or hardware.
+</p>
+
+<p>
+Now let&rsquo;s look at dmesg to see if any firmware is loaded:
+</p>
+
+<pre class="example">
+[    0.222906] Spectre V2 : Enabling Restricted Speculation for firmware calls
+[    5.511731] [drm] Finished loading DMC firmware i915/kbl_dmc_ver1_04.bin (v1.4)
+[   25.579703] iwlwifi 0000:02:00.0: loaded firmware version 36.77d01142.0 op_mode iwlmvm
+[   25.612759] Bluetooth: hci0: Minimum firmware build 1 week 10 2014
+[   25.620251] Bluetooth: hci0: Found device firmware: intel/ibt-12-16.sfi
+[   25.712793] iwlwifi 0000:02:00.0: Allocated 0x00400000 bytes for firmware monitor.
+[   27.042080] Bluetooth: hci0: Waiting for firmware download to complete
+</pre>
+
+<p>
+Aha! So it appears we need <code>i915/kbl_dmc_ver1_04.bin</code> for i915. In
+the case case one doesn&rsquo;t need firmware, it won&rsquo;t show anything
+related to <code>drm</code> or a line with your driver name in it.
+</p>
+
+<p>
+By the way, it is a good idea to check dmesg for hints about missing
+firmware, or alternative drivers, for example my trackpad is
+supported by both i2c and synaptics based trackpad drivers, and the
+kernel was kind enough to tell me.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org014237d" class="outline-2">
+<h2 id="org014237d">First step: Obtain the firmware</h2>
+<div class="outline-text-2" id="text-org014237d">
+<p>
+On Gentoo install
+<code>sys-kernel/linux-firmware</code>. You will have to agree to some non-free
+licenses; nothing too inane, but worth mentioning. Now just
+run <code>emerge -av sys-kernel/linux-firmware</code>. (On other distros it
+might be this easy, or more difficult; for example—in my experience
+Debian does not ship every single firmware like Gentoo does, so
+YMMV.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbf99349" class="outline-2">
+<h2 id="orgbf99349">Second step, Option A: Compile firmware into your kernel</h2>
+<div class="outline-text-2" id="text-orgbf99349">
+<p>
+Since most of my systems run Gentoo, it is business as usual to
+deploy a kernel with most excess drivers disabled except for common
+hot-swappable components such as USB network interfaces, audio
+devices, and so on. For example, this laptop&rsquo;s config was originally
+derived from genkernel&rsquo; stock amd64 config with most extra drivers
+disabled, then augmented with support for an Acer ES1-111M-C7DE,
+and finally with support for this Elitebook.
+</p>
+
+<p>
+I had compiled the kernel with i915 support built into the image, as
+opposed to an additional kernel module. Unfortunately this meant the
+kernel is unable to load firmware from filesystem, because it
+appears only kernel modules can load firmware from filesystem. To
+work around this without resorting to making i915 a kernel module,
+we can include the drivers within the kernel image (<code>vmlinuz</code>).
+Including firmware and drivers both in the vmlinuz has a couple
+benefits. First it will always be available. There is no need to
+figure out how to load the driver and firmware from initrd, let
+alone getting the initrd generator one is using, to cooperate. A
+downside is it makes the kernel very specific to the machine,
+because perhaps a different Intel machine needs a different firmware
+file compiled in.
+</p>
+
+<p>
+To achieve including the firmware in kernel, I set the following
+values in my kernel config (<code>.config</code> in your kernel source tree).
+</p>
+
+<pre class="example">
+CONFIG_EXTRA_FIRMWARE="i915/kbl_dmc_ver1_04.bin"
+CONFIG_EXTRA_FIRMWARE_DIR="/lib/firmware"
+</pre>
+
+<p>
+Note, if you&rsquo;re using menuconfig, you can type <code>/EXTRA_FIRMWARE</code>
+(slash for search, then the text) followed by keyboard return to
+find where these settings exist in the menu system.
+</p>
+
+<p>
+Then I verified i915 is indeed not a kernel module, but built into
+the kernel image (it would be <code>m</code> if it&rsquo;s a module):
+</p>
+
+<pre class="example">
+CONFIG_DRM_I915=y
+</pre>
+
+<p>
+After compiling &amp; installing the kernel (and generating a dracut
+initrd for cryptsetup/lvm), I was able to reboot and get an early
+pre-mounted-root framebuffer on this device.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org156bb34" class="outline-2">
+<h2 id="org156bb34">Second step, Option B: A portable kernel approach (using <code>sys-kernel/vanilla-kernel</code>)</h2>
+<div class="outline-text-2" id="text-org156bb34">
+<p>
+I discovered the Gentoo devs <a href="https://blogs.gentoo.org/mgorny/2019/12/19/a-distribution-kernel-for-gentoo/">have begun shipping an ebuild that
+builds and installs a kernel with a portable, livecd friendly
+config</a>. In addition this package will optionally generates an initrd
+with dracut as a pkg<sub>postinst</sub> step, making it very suitable as a
+replacement for users who just want a working kernel, and don&rsquo;t mind
+a excessive compatibility (at a cost to size and build time).
+</p>
+
+<p>
+This presents a different challenge, because while this package does
+allow the user to drop in their own .config, it is not very
+multiple-machine-deployment friendly to hard-code each individual
+firmware into the kernel. Instead we tell dracut to include our
+framebuffer driver. As mentioned above I found this computer uses
+the <code>i915</code> kernel driver for framebuffer. Let&rsquo;s tell dracut to
+include the driver:
+</p>
+
+<pre class="example">
+cat &gt; /etc/dracut.conf.d/i915.conf &lt;&lt;EOF
+add_drivers+=" i915 "
+EOF
+</pre>
+
+<p>
+Dracut is smart enough to pick up the firmware the kernel module
+needs, provided they are installed. To get an idea what firmware
+dracut will include, run <code>modinfo i915 -F firmware</code> which will print
+out a bunch of firmware relative paths.
+</p>
+
+<p>
+After applying this fix, just regenerate your initrd using dracut; in
+my case I let portage do the work:
+<code>emerge -1av sys-kernel/vanilla-kernel</code>. Finally reboot.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8e61f92" class="outline-2">
+<h2 id="org8e61f92">Conclusion</h2>
+<div class="outline-text-2" id="text-org8e61f92">
+<p>
+Check dmesg. Always check dmesg. We found two ways to deploy
+firmware, in-kernel and in-initrd. The in-kernel technique is best
+for a device-specific kernel, the in-initrd is best for a portable
+kernel. I am a big fan of the second technique because it scales
+well to many machines.
+</p>
+
+<p>
+I did not touch on the political side of using binary blobs. It
+would be nice to not use any non-free software, but I rather have a
+working system with a couple small non-free components, than a
+non-working system. Which is more valuable, your freedom, or reduced
+capacity of your tools?
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+GRML is my favorite live media. It is simple, to the point, has
+lots of little scripts to streamline tasks such as setting up a
+wireless AP, a iPXE netboot environment, a router, installing debian,
+and so on. And Remastering is relatively straight forward. It also has
+a sane gui sutable for any machine (fluxbox).
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+Thanks to <a href="https://askubuntu.com/questions/727577/how-to-check-if-framebuffer-is-enabled">this post</a> on Ask Ubuntu
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-gentoo.html">gentoo</a> <a href="tag-linux.html">linux</a> <a href="tag-computing.html">computing</a> </div>
 <div class="post-date">02 Aug 2019</div><h1 class="post-title"><a href="2019-08-02-the-danger-of-fuzzy-matching-over-ones-path.html">The Danger of fuzzy matching over one's PATH</a></h1>
 <p>
 Awhile back I noticed my personal <code>mnt/</code> directory, my (empty) personal
@@ -98,9 +360,9 @@ Regardless, I have yet to heed my own warning. Maybe I should just use
 programs I want to launch from rofi. Someday :)
 </p>
 
-<div id="outline-container-org7ff4894" class="outline-2">
-<h2 id="org7ff4894">About Unison</h2>
-<div class="outline-text-2" id="text-org7ff4894">
+<div id="outline-container-orgd92b955" class="outline-2">
+<h2 id="orgd92b955">About Unison</h2>
+<div class="outline-text-2" id="text-orgd92b955">
 <p>
 I should mention unison is a superb tool for synchronizing your
 data. It shows the user a list of changes to each directory being
@@ -293,9 +555,9 @@ Note: I did not explore some of Blink's features such as using it a
 local iOS shell or settings synchronization. YMMV.
 </p>
 
-<div id="outline-container-org06fa7e5" class="outline-2">
-<h2 id="org06fa7e5">Getting started</h2>
-<div class="outline-text-2" id="text-org06fa7e5">
+<div id="outline-container-org7dcc60c" class="outline-2">
+<h2 id="org7dcc60c">Getting started</h2>
+<div class="outline-text-2" id="text-org7dcc60c">
 <p>
 Here are the steps I used to get started with Blink, as it was
 relatively unclear where to find documentation and which settings
@@ -441,9 +703,9 @@ for C!<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
 </div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-computing.html">computing</a> <a href="tag-rant.html">rant</a> </div>
 <div class="post-date">11 Jan 2019</div><h1 class="post-title"><a href="2019-01-11-publishing-with-org-static-blog.html">Publishing with org-static-blog</a></h1>
 
-<div id="outline-container-orgb234819" class="outline-2">
-<h2 id="orgb234819">Criteria</h2>
-<div class="outline-text-2" id="text-orgb234819">
+<div id="outline-container-orgdbea66b" class="outline-2">
+<h2 id="orgdbea66b">Criteria</h2>
+<div class="outline-text-2" id="text-orgdbea66b">
 <p>
 After reviewing a list of org-mode<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> capable static website generators<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>,
 I decided to see if org-static-blog<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> could suffice my simple
@@ -464,9 +726,9 @@ achieve a minimum viable web-page for this project.
 </div>
 </div>
 
-<div id="outline-container-orgbde4958" class="outline-2">
-<h2 id="orgbde4958">Configuration of <code>org-static-blog</code></h2>
-<div class="outline-text-2" id="text-orgbde4958">
+<div id="outline-container-orgec6c80e" class="outline-2">
+<h2 id="orgec6c80e">Configuration of <code>org-static-blog</code></h2>
+<div class="outline-text-2" id="text-orgec6c80e">
 <p>
 Following the org-static-blog README documentation, it is very
 straight forward to get a minimal viable website generated. I added
@@ -507,9 +769,9 @@ be necessary to generate a simple site like this one.
 </div>
 </div>
 
-<div id="outline-container-orgd674616" class="outline-2">
-<h2 id="orgd674616">Deploying with Caddy and GitHub</h2>
-<div class="outline-text-2" id="text-orgd674616">
+<div id="outline-container-org5ce2cdf" class="outline-2">
+<h2 id="org5ce2cdf">Deploying with Caddy and GitHub</h2>
+<div class="outline-text-2" id="text-org5ce2cdf">
 <p>
 I am a fan of the Caddy<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup> web server which offers automatic HTTPS
 via LetsEncrypt with only a few lines of configuration. In addition
@@ -533,9 +795,9 @@ fired, the website is now deployed.
 </p>
 </div>
 
-<div id="outline-container-org07f7c9f" class="outline-3">
-<h3 id="org07f7c9f">Server Configuration</h3>
-<div class="outline-text-3" id="text-org07f7c9f">
+<div id="outline-container-org9d52784" class="outline-3">
+<h3 id="org9d52784">Server Configuration</h3>
+<div class="outline-text-3" id="text-org9d52784">
 <p>
 I switched most of my personal internet-related services to Docker<sup><a id="fnr.8" class="footref" href="#fn.8">8</a></sup> in
 conjunction with <code>docker-compose</code><sup><a id="fnr.9" class="footref" href="#fn.9">9</a></sup> last year. The main rationale
@@ -595,9 +857,9 @@ configuration first.
 </div>
 </div>
 
-<div id="outline-container-org818866f" class="outline-3">
-<h3 id="org818866f">GitHub Configuration</h3>
-<div class="outline-text-3" id="text-org818866f">
+<div id="outline-container-orgd5b6198" class="outline-3">
+<h3 id="orgd5b6198">GitHub Configuration</h3>
+<div class="outline-text-3" id="text-orgd5b6198">
 <p>
 Simply create the GitHub repository, then add a webhook. It is
 important to note the webhook <i>must</i> send a JSON payload. By default a
@@ -608,9 +870,9 @@ payload and will not work.
 </div>
 </div>
 
-<div id="outline-container-org6d729af" class="outline-2">
-<h2 id="org6d729af">Conclusion</h2>
-<div class="outline-text-2" id="text-org6d729af">
+<div id="outline-container-org7bfe478" class="outline-2">
+<h2 id="org7bfe478">Conclusion</h2>
+<div class="outline-text-2" id="text-org7bfe478">
 <p>
 With this simple setup I can write posts. I can easily move the
 configuration to a new host at will. In addition my setup does not

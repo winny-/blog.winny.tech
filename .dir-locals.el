@@ -7,7 +7,7 @@
          (org-static-blog-enable-tags . t)
          (org-export-with-toc . nil)
          (org-static-blog-page-header . "
-<link href=\"static/style.css?v=1.5\" rel=\"stylesheet\" type=\"text/css\" />
+<link href=\"static/style.css?v=1.6\" rel=\"stylesheet\" type=\"text/css\" />
 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
 ")
          (org-static-blog-page-preamble . "

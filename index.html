@@ -8,7 +8,7 @@
       title="RSS feed for https://blog.winny.tech/"/>
 <title>blog.winny.tech</title>
 
-<link href="static/style.css?v=1.5" rel="stylesheet" type="text/css" />
+<link href="static/style.css?v=1.6" rel="stylesheet" type="text/css" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -32,6 +32,268 @@ blog.winny.tech
 </div>
 <div id="content">
 
+<div class="post-date">25 Dec 2019</div><h1 class="post-title"><a href="2019-12-25-how-to-fix-early-framebuffer-problems,-or-can-i-type-my-disk-password-yet.html">How to fix early framebuffer problems, or "Can I type my disk password yet??"</a></h1>
+<p>
+Most of my workstations &amp; laptops require a passphrase typed in to
+open the encrypted root filesystem. So my steps to booting are as
+follows:
+</p>
+
+<ol class="org-ol">
+<li>Power on machine</li>
+<li>Wait for FDE passphrase prompt</li>
+<li>Type in FDE passphrase</li>
+<li>Wait for boot to complete and automatic XFCE session to start</li>
+</ol>
+
+<p>
+Since I need to know when the computer is ready to accept the
+passphrase, it is important the framebuffer is usable during the early
+part of the boot. In the case of of HP Elitebook 820 G4, the EFI
+framebuffer does not appear to work, and I rather not boot in BIOS
+mode to get a functional VESA framebuffer. Making things more awkward,
+a firmware is needed when the i915 driver is loaded, or the
+framebuffer will not work either. (It&rsquo;s not always clear if a firmware
+is needed, so one should run <code>dmesg | grep -F firmware</code> and check if
+firmware is being loaded.)
+</p>
+
+<p>
+With this information, the problem is summarized to: <b>&ldquo;How do I ensure
+i915 is available at boot with the appropriate firmware?&rdquo;</b>. This
+question can be easily generalized to any framebuffer driver, as the
+steps are more-or-less the same.
+</p>
+
+<div id="outline-container-org27573a4" class="outline-2">
+<h2 id="org27573a4">Zeroth step: Do you need only a driver, or a driver with firmware?</h2>
+<div class="outline-text-2" id="text-org27573a4">
+<p>
+IT is a good idea to verify if your kernel is missing a driver at
+boot, or is missing firmware or both. Boot up a Live USB with good
+hardware compatibility, such as <a href="http://grml.org/">GRML</a><sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> or Ubuntu&rsquo;s, and let&rsquo;s see what
+framebuffer driver our host is trying to use<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>:
+</p>
+
+<pre class="example">
+$ dmesg | grep -i 'frame.*buffer'
+[    4.790570] efifb: framebuffer at 0xe0000000, using 8128k, total 8128k
+[    4.790611] fb0: EFI VGA frame buffer device
+[    4.820637] Console: switching to colour frame buffer device 240x67
+[    6.643895] i915 0000:00:02.0: fb1: i915drmfb frame buffer device
+</pre>
+
+<p>
+Se we can see the efifb is initially used for a couple seconds, then
+i915 is used for the rest of the computer&rsquo;s uptime. Now let&rsquo;s look
+at if firmware is necessary, first checking if <code>modinfo(8)</code> knows of
+any firmware:
+</p>
+
+<pre class="example">
+$ modinfo i915 -F firmware
+i915/bxt_dmc_ver1_07.bin
+i915/skl_dmc_ver1_27.bin
+i915/kbl_dmc_ver1_04.bin
+... SNIP ...
+i915/kbl_guc_33.0.0.bin
+i915/icl_huc_ver8_4_3238.bin
+i915/icl_guc_33.0.0.bin
+</pre>
+
+<p>
+This indicates this driver will load firmware when available, and if
+necessary for the particular mode of operation or hardware.
+</p>
+
+<p>
+Now let&rsquo;s look at dmesg to see if any firmware is loaded:
+</p>
+
+<pre class="example">
+[    0.222906] Spectre V2 : Enabling Restricted Speculation for firmware calls
+[    5.511731] [drm] Finished loading DMC firmware i915/kbl_dmc_ver1_04.bin (v1.4)
+[   25.579703] iwlwifi 0000:02:00.0: loaded firmware version 36.77d01142.0 op_mode iwlmvm
+[   25.612759] Bluetooth: hci0: Minimum firmware build 1 week 10 2014
+[   25.620251] Bluetooth: hci0: Found device firmware: intel/ibt-12-16.sfi
+[   25.712793] iwlwifi 0000:02:00.0: Allocated 0x00400000 bytes for firmware monitor.
+[   27.042080] Bluetooth: hci0: Waiting for firmware download to complete
+</pre>
+
+<p>
+Aha! So it appears we need <code>i915/kbl_dmc_ver1_04.bin</code> for i915. In
+the case case one doesn&rsquo;t need firmware, it won&rsquo;t show anything
+related to <code>drm</code> or a line with your driver name in it.
+</p>
+
+<p>
+By the way, it is a good idea to check dmesg for hints about missing
+firmware, or alternative drivers, for example my trackpad is
+supported by both i2c and synaptics based trackpad drivers, and the
+kernel was kind enough to tell me.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org014237d" class="outline-2">
+<h2 id="org014237d">First step: Obtain the firmware</h2>
+<div class="outline-text-2" id="text-org014237d">
+<p>
+On Gentoo install
+<code>sys-kernel/linux-firmware</code>. You will have to agree to some non-free
+licenses; nothing too inane, but worth mentioning. Now just
+run <code>emerge -av sys-kernel/linux-firmware</code>. (On other distros it
+might be this easy, or more difficult; for example—in my experience
+Debian does not ship every single firmware like Gentoo does, so
+YMMV.)
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbf99349" class="outline-2">
+<h2 id="orgbf99349">Second step, Option A: Compile firmware into your kernel</h2>
+<div class="outline-text-2" id="text-orgbf99349">
+<p>
+Since most of my systems run Gentoo, it is business as usual to
+deploy a kernel with most excess drivers disabled except for common
+hot-swappable components such as USB network interfaces, audio
+devices, and so on. For example, this laptop&rsquo;s config was originally
+derived from genkernel&rsquo; stock amd64 config with most extra drivers
+disabled, then augmented with support for an Acer ES1-111M-C7DE,
+and finally with support for this Elitebook.
+</p>
+
+<p>
+I had compiled the kernel with i915 support built into the image, as
+opposed to an additional kernel module. Unfortunately this meant the
+kernel is unable to load firmware from filesystem, because it
+appears only kernel modules can load firmware from filesystem. To
+work around this without resorting to making i915 a kernel module,
+we can include the drivers within the kernel image (<code>vmlinuz</code>).
+Including firmware and drivers both in the vmlinuz has a couple
+benefits. First it will always be available. There is no need to
+figure out how to load the driver and firmware from initrd, let
+alone getting the initrd generator one is using, to cooperate. A
+downside is it makes the kernel very specific to the machine,
+because perhaps a different Intel machine needs a different firmware
+file compiled in.
+</p>
+
+<p>
+To achieve including the firmware in kernel, I set the following
+values in my kernel config (<code>.config</code> in your kernel source tree).
+</p>
+
+<pre class="example">
+CONFIG_EXTRA_FIRMWARE="i915/kbl_dmc_ver1_04.bin"
+CONFIG_EXTRA_FIRMWARE_DIR="/lib/firmware"
+</pre>
+
+<p>
+Note, if you&rsquo;re using menuconfig, you can type <code>/EXTRA_FIRMWARE</code>
+(slash for search, then the text) followed by keyboard return to
+find where these settings exist in the menu system.
+</p>
+
+<p>
+Then I verified i915 is indeed not a kernel module, but built into
+the kernel image (it would be <code>m</code> if it&rsquo;s a module):
+</p>
+
+<pre class="example">
+CONFIG_DRM_I915=y
+</pre>
+
+<p>
+After compiling &amp; installing the kernel (and generating a dracut
+initrd for cryptsetup/lvm), I was able to reboot and get an early
+pre-mounted-root framebuffer on this device.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org156bb34" class="outline-2">
+<h2 id="org156bb34">Second step, Option B: A portable kernel approach (using <code>sys-kernel/vanilla-kernel</code>)</h2>
+<div class="outline-text-2" id="text-org156bb34">
+<p>
+I discovered the Gentoo devs <a href="https://blogs.gentoo.org/mgorny/2019/12/19/a-distribution-kernel-for-gentoo/">have begun shipping an ebuild that
+builds and installs a kernel with a portable, livecd friendly
+config</a>. In addition this package will optionally generates an initrd
+with dracut as a pkg<sub>postinst</sub> step, making it very suitable as a
+replacement for users who just want a working kernel, and don&rsquo;t mind
+a excessive compatibility (at a cost to size and build time).
+</p>
+
+<p>
+This presents a different challenge, because while this package does
+allow the user to drop in their own .config, it is not very
+multiple-machine-deployment friendly to hard-code each individual
+firmware into the kernel. Instead we tell dracut to include our
+framebuffer driver. As mentioned above I found this computer uses
+the <code>i915</code> kernel driver for framebuffer. Let&rsquo;s tell dracut to
+include the driver:
+</p>
+
+<pre class="example">
+cat &gt; /etc/dracut.conf.d/i915.conf &lt;&lt;EOF
+add_drivers+=" i915 "
+EOF
+</pre>
+
+<p>
+Dracut is smart enough to pick up the firmware the kernel module
+needs, provided they are installed. To get an idea what firmware
+dracut will include, run <code>modinfo i915 -F firmware</code> which will print
+out a bunch of firmware relative paths.
+</p>
+
+<p>
+After applying this fix, just regenerate your initrd using dracut; in
+my case I let portage do the work:
+<code>emerge -1av sys-kernel/vanilla-kernel</code>. Finally reboot.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8e61f92" class="outline-2">
+<h2 id="org8e61f92">Conclusion</h2>
+<div class="outline-text-2" id="text-org8e61f92">
+<p>
+Check dmesg. Always check dmesg. We found two ways to deploy
+firmware, in-kernel and in-initrd. The in-kernel technique is best
+for a device-specific kernel, the in-initrd is best for a portable
+kernel. I am a big fan of the second technique because it scales
+well to many machines.
+</p>
+
+<p>
+I did not touch on the political side of using binary blobs. It
+would be nice to not use any non-free software, but I rather have a
+working system with a couple small non-free components, than a
+non-working system. Which is more valuable, your freedom, or reduced
+capacity of your tools?
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+GRML is my favorite live media. It is simple, to the point, has
+lots of little scripts to streamline tasks such as setting up a
+wireless AP, a iPXE netboot environment, a router, installing debian,
+and so on. And Remastering is relatively straight forward. It also has
+a sane gui sutable for any machine (fluxbox).
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+Thanks to <a href="https://askubuntu.com/questions/727577/how-to-check-if-framebuffer-is-enabled">this post</a> on Ask Ubuntu
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-gentoo.html">gentoo</a> <a href="tag-linux.html">linux</a> <a href="tag-computing.html">computing</a> </div>
 <div class="post-date">23 Nov 2019</div><h1 class="post-title"><a href="2019-11-23-milwaukee-code-camp.html">Milwaukee Code Camp</a></h1>
 <p>
 This most recent weekend (November 16th) I attended the <a href="https://www.milwaukeecodecamp.com/">Milwaukee Code
@@ -39,9 +301,9 @@ Camp</a> and was pleased with the content. There was plenty of food,
 coffee, and give-aways.
 </p>
 
-<div id="outline-container-orgbb1fcb5" class="outline-2">
-<h2 id="orgbb1fcb5">The Talks</h2>
-<div class="outline-text-2" id="text-orgbb1fcb5">
+<div id="outline-container-orgc09d839" class="outline-2">
+<h2 id="orgc09d839">The Talks</h2>
+<div class="outline-text-2" id="text-orgc09d839">
 <p>
 I attended five talks:
 </p>
@@ -92,9 +354,9 @@ there is hope for the web ecosystem yet.
 </div>
 </div>
 
-<div id="outline-container-orgbb34c03" class="outline-2">
-<h2 id="orgbb34c03">The Food</h2>
-<div class="outline-text-2" id="text-orgbb34c03">
+<div id="outline-container-org9e96a8a" class="outline-2">
+<h2 id="org9e96a8a">The Food</h2>
+<div class="outline-text-2" id="text-org9e96a8a">
 <p>
 Sweet pastries, water, soda, coffee were available in the
 morning ad throughout the day. There may have been more
@@ -105,9 +367,9 @@ shortage of pizza. The coffee was catered from Panera Bread.
 </div>
 </div>
 
-<div id="outline-container-org877f14d" class="outline-2">
-<h2 id="org877f14d">Conclusion</h2>
-<div class="outline-text-2" id="text-org877f14d">
+<div id="outline-container-orgbdc4483" class="outline-2">
+<h2 id="orgbdc4483">Conclusion</h2>
+<div class="outline-text-2" id="text-orgbdc4483">
 <p>
 In addition to learning about Terraform, Kubernetes, and
 accessibility, I met a lot of cool people. I think this event was an
@@ -156,9 +418,9 @@ folded onto itself, held together with adhesive tape. The assembled
 device was remarkably robust and easy to operate.
 </p>
 
-<div id="outline-container-org364c38d" class="outline-2">
-<h2 id="org364c38d">Challenges</h2>
-<div class="outline-text-2" id="text-org364c38d">
+<div id="outline-container-org15ca80f" class="outline-2">
+<h2 id="org15ca80f">Challenges</h2>
+<div class="outline-text-2" id="text-org15ca80f">
 <p>
 We were among the first group to finish building the kit. It turned
 out the software on the included SD card was not exactly what we
@@ -242,9 +504,9 @@ word hunt!
 </div>
 </div>
 
-<div id="outline-container-org4442d80" class="outline-2">
-<h2 id="org4442d80">Completion</h2>
-<div class="outline-text-2" id="text-org4442d80">
+<div id="outline-container-orgb1af17d" class="outline-2">
+<h2 id="orgb1af17d">Completion</h2>
+<div class="outline-text-2" id="text-orgb1af17d">
 <p>
 While our PoC was not deployed in time for presentations, we were
 about five to ten minutes away from setting it up, and demoing
@@ -274,9 +536,9 @@ firmware on it, for example.
 </div>
 </div>
 
-<div id="outline-container-org6ccc31d" class="outline-2">
-<h2 id="org6ccc31d">Conclusion</h2>
-<div class="outline-text-2" id="text-org6ccc31d">
+<div id="outline-container-org1ba0a7b" class="outline-2">
+<h2 id="org1ba0a7b">Conclusion</h2>
+<div class="outline-text-2" id="text-org1ba0a7b">
 <p>
 Our issue in seeking out a usable networking topology had be thinking:
 if I simply had a device with two wifi radios, I could run one as an
@@ -341,9 +603,9 @@ hours, and I learned a lot about team dynamics. We formed a team of eight
 participants. We encountered a couple significant challenges.
 </p>
 
-<div id="outline-container-org85a7287" class="outline-2">
-<h2 id="org85a7287">The stack matters</h2>
-<div class="outline-text-2" id="text-org85a7287">
+<div id="outline-container-org25e4843" class="outline-2">
+<h2 id="org25e4843">The stack matters</h2>
+<div class="outline-text-2" id="text-org25e4843">
 <p>
 Initially we decided to use Python and the <a href="https://www.djangoproject.com/">Django framework</a>. This
 turned out to be a grave error, because picking up Django quickly
@@ -398,9 +660,9 @@ project with classmates.
 </div>
 </div>
 
-<div id="outline-container-orgaee75c1" class="outline-2">
-<h2 id="orgaee75c1">Debian surprised me (again)</h2>
-<div class="outline-text-2" id="text-orgaee75c1">
+<div id="outline-container-orga68c50a" class="outline-2">
+<h2 id="orga68c50a">Debian surprised me (again)</h2>
+<div class="outline-text-2" id="text-orga68c50a">
 <p>
 A funny experience during the hackathon was discovering a rather
 surprising patch Debian's virtualenv package ships. On CentOS 7,
@@ -414,9 +676,9 @@ installing <code>python2</code></a> in the virtual environment. One must pass <c
 </div>
 
 
-<div id="outline-container-orgdf382fe" class="outline-2">
-<h2 id="orgdf382fe">Demos never work</h2>
-<div class="outline-text-2" id="text-orgdf382fe">
+<div id="outline-container-org5c2a0e6" class="outline-2">
+<h2 id="org5c2a0e6">Demos never work</h2>
+<div class="outline-text-2" id="text-org5c2a0e6">
 <p>
 We almost had a working demo, but the part that got us was
 deployment. I spun up a <a href="https://www.vultr.com/">Vultr</a> VPS, installed npm, node, caddy,
@@ -435,9 +697,9 @@ containerized workflows; this would have been a non-issue. Drop in a
 </div>
 </div>
 
-<div id="outline-container-org80654b9" class="outline-2">
-<h2 id="org80654b9">Teamwork is essential</h2>
-<div class="outline-text-2" id="text-org80654b9">
+<div id="outline-container-org38584b7" class="outline-2">
+<h2 id="org38584b7">Teamwork is essential</h2>
+<div class="outline-text-2" id="text-org38584b7">
 <p>
 We had a team of eight members, and it was challenging to find
 tasks for everybody. Given we had two major components &#x2014; frontend
@@ -464,9 +726,9 @@ games, or simply taking a break. Make sure to smile.
 </div>
 </div>
 
-<div id="outline-container-org6f54117" class="outline-2">
-<h2 id="org6f54117">Conclusion</h2>
-<div class="outline-text-2" id="text-org6f54117">
+<div id="outline-container-org5e234df" class="outline-2">
+<h2 id="org5e234df">Conclusion</h2>
+<div class="outline-text-2" id="text-org5e234df">
 <p>
 I had fun at GDG Milwaukee DevFest. Good food, good company. We
 found our initial choice of Django was not productive in true
@@ -496,9 +758,9 @@ operation. Unfortunately this meant I could not do one of the simplest
 operations in Emacs - visiting files and directories.
 </p>
 
-<div id="outline-container-org35be3c2" class="outline-2">
-<h2 id="org35be3c2">Enter <code>debug-on-quit</code></h2>
-<div class="outline-text-2" id="text-org35be3c2">
+<div id="outline-container-org59c87e8" class="outline-2">
+<h2 id="org59c87e8">Enter <code>debug-on-quit</code></h2>
+<div class="outline-text-2" id="text-org59c87e8">
 <p>
 After some searching <a href="https://www.gnu.org/software/emacs/manual/html_node/eintr/Debugging.html#Debugging">I found</a> the <code>debug-on-quit</code> and <code>debug-on-error</code>
 variables<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>, with their corresponding commands <code>toggle-debug-on-quit</code>
@@ -544,9 +806,9 @@ documented somewhere now.
 </div>
 </div>
 
-<div id="outline-container-org919b932" class="outline-2">
-<h2 id="org919b932">Don't forget about <code>debug-on-error</code></h2>
-<div class="outline-text-2" id="text-org919b932">
+<div id="outline-container-org7a3db0f" class="outline-2">
+<h2 id="org7a3db0f">Don't forget about <code>debug-on-error</code></h2>
+<div class="outline-text-2" id="text-org7a3db0f">
 <p>
 <code>debug-on-error</code> is also extremely useful, especially when extending
 Emacs with your own Elisp code. When I write Elisp, I almost always
@@ -579,125 +841,7 @@ that's silly. Emacs is the best documetation browser. :)
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-emacs.html">emacs</a> <a href="tag-productivity.html">productivity</a> </div>
-<div class="post-date">02 Aug 2019</div><h1 class="post-title"><a href="2019-08-02-the-danger-of-fuzzy-matching-over-ones-path.html">The Danger of fuzzy matching over one's PATH</a></h1>
-<p>
-Awhile back I noticed my personal <code>mnt/</code> directory, my (empty) personal
-<code>tmp/</code> directory, and a few symbolic links disappeared from my home
-directory. I only noticed because I use unison<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> to synchronize my
-desktop and laptop homedirs. The actual amount of removed directories
-and symbolic links were staggering, and it costed me five minutes of
-extra effort to search through the unison UI to ignore files I don&rsquo;t
-want to synchronize. Repeat this a few times a day, with the problem
-occurring at seemingly random intervals, and you&rsquo;ve wasted minutes out
-of every day, which adds up to hours every month.
-</p>
-
-<p>
-For months I had not figured out what the problem was. By chance I had
-noticed while using my application launcher, I had accidentally not
-ran <code>links -g</code> <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> but instead had ran <code>cleanlinks</code>. I wonder to myself
-what was I running by accident, as I had done this before, but had not
-thought anything of it, assuming it was a program that would print
-usage or perform a no-operation by default.
-</p>
-
-<p>
-I was wrong.
-</p>
-
-<p>
-Turns out <code>cleanlinks</code> searches the current working directory for <b>empty</b>
-directories and <b>broken</b> symbolic links. Both are useful. For example I
-keep empty directories in <code>~/mnt/</code> to mount <code>sshfs</code> stuff, and I prefer to
-use <code>~/tmp/</code> as a work directory because no system scripts will touch
-it.<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> I had a few <b>broken</b> symbolic links scattered about, from
-weird git repositories working trees to some stale user-level systemd
-unit links from my archlinux install.
-</p>
-
-<p>
-Making things more interesting, if you run <code>cleanlinks --help</code>, or with
-any flags, it operates as usual. So it&rsquo;s a mistake to also do
-<code>cleanlinks /some/directory/i/want/to/clean</code>. As a part of imake,<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>
-the old X11 ecosystem build tools, <code>cleanlinks</code> will be installed on
-many systems and it&rsquo;s not safe to run it lest you enjoy random stuff
-being messed about with in your current directory.
-</p>
-
-<p>
-How did I manage to run <code>cleanlinks</code> so many times? I did not have links
-installed on the affected machine. And even after I did install it, I
-forgot to remove <code>cleanlinks</code> from my rofi runcache. So it had a higher
-precedence to match than <code>links</code> in certain cases. Hence I ran it a few
-times on accident even after installing links.
-</p>
-
-<p>
-Therefore, I strongly recommend one doesn&rsquo;t fuzzy match over their
-<code>PATH</code>. Who knows what other nasty tools ship on your system that will
-lay waste your productivity, or worse, damage your personal files.
-</p>
-
-<p>
-Regardless, I have yet to heed my own warning. Maybe I should just use
-<code>.desktop</code> files, but then again, maybe there exists a
-<code>cleanlinks.desktop</code>&#x2026; Ideally, I&rsquo;ll create a directory of  symlinks to
-programs I want to launch from rofi. Someday :)
-</p>
-
-<div id="outline-container-org7ff4894" class="outline-2">
-<h2 id="org7ff4894">About Unison</h2>
-<div class="outline-text-2" id="text-org7ff4894">
-<p>
-I should mention unison is a superb tool for synchronizing your
-data. It shows the user a list of changes to each directory being
-synchronized, waits for the user to decide which way each file should
-be synchronized:
-</p>
-
-<ol class="org-ol">
-<li>Send file from host A to B</li>
-<li>Send file from host B to A</li>
-<li>Ignore the file this time</li>
-<li>Ignore the file permanently</li>
-<li>Merge the files</li>
-</ol>
-
-<p>
-Because unison doesn&rsquo;t try to be fancy or automatic, it is easy to
-understand what is happening.
-</p>
-</div>
-</div>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
-<a href="https://www.cis.upenn.edu/~bcpierce/unison/">Unison homepage</a>
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
-Links 2 is the best web 1.0 browser. It even shows images and
-different text sizes. Screenshots on <a href="http://links.twibright.com/features.php">this page</a>.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
-<code>/var/tmp/</code> could also work, but this way I know nobody is gunna
-mess with my files and I won&rsquo;t accidentally mess up permissions on
-sensitive data.
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
-<a href="https://gitlab.freedesktop.org/xorg/util/imake">imake on freedesktop&rsquo;s GitLab</a>. See also what packages depend on
-imake <a href="https://www.archlinux.org/packages/extra/x86_64/imake/">in Arch Linux</a>. I use Gentoo across my laptop and workstation, so
-it&rsquo;s necessary to have imake installed.
-</p></div></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-computing.html">computing</a> <a href="tag-rant.html">rant</a> </div><div id="archive">
+</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-emacs.html">emacs</a> <a href="tag-productivity.html">productivity</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
 </div>

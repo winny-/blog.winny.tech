@@ -88,7 +88,7 @@ img {
     text-align: center;
 }
 
-.org-src-container {
+.org-src-container, .example {
     background-color: #f6fffe;
     border-style: solid;
     border-width: 5px;

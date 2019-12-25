@@ -8,7 +8,7 @@
       title="RSS feed for https://blog.winny.tech/"/>
 <title>Track down basic Emacs bugs & hangs</title>
 
-<link href="static/style.css?v=1.5" rel="stylesheet" type="text/css" />
+<link href="static/style.css?v=1.6" rel="stylesheet" type="text/css" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -44,9 +44,9 @@ operation. Unfortunately this meant I could not do one of the simplest
 operations in Emacs - visiting files and directories.
 </p>
 
-<div id="outline-container-org35be3c2" class="outline-2">
-<h2 id="org35be3c2">Enter <code>debug-on-quit</code></h2>
-<div class="outline-text-2" id="text-org35be3c2">
+<div id="outline-container-org59c87e8" class="outline-2">
+<h2 id="org59c87e8">Enter <code>debug-on-quit</code></h2>
+<div class="outline-text-2" id="text-org59c87e8">
 <p>
 After some searching <a href="https://www.gnu.org/software/emacs/manual/html_node/eintr/Debugging.html#Debugging">I found</a> the <code>debug-on-quit</code> and <code>debug-on-error</code>
 variables<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>, with their corresponding commands <code>toggle-debug-on-quit</code>
@@ -92,9 +92,9 @@ documented somewhere now.
 </div>
 </div>
 
-<div id="outline-container-org919b932" class="outline-2">
-<h2 id="org919b932">Don't forget about <code>debug-on-error</code></h2>
-<div class="outline-text-2" id="text-org919b932">
+<div id="outline-container-org7a3db0f" class="outline-2">
+<h2 id="org7a3db0f">Don't forget about <code>debug-on-error</code></h2>
+<div class="outline-text-2" id="text-org7a3db0f">
 <p>
 <code>debug-on-error</code> is also extremely useful, especially when extending
 Emacs with your own Elisp code. When I write Elisp, I almost always

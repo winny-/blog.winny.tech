@@ -31,7 +31,7 @@ blog.winny.tech
 <hr/>
 </div>
 <div id="content">
-<h1 class="title">Posts tagged "gentoo":</h1>
+<h1 class="title">Posts tagged "linux":</h1>
 <div class="post-date">25 Dec 2019</div><h1 class="post-title"><a href="2019-12-25-how-to-fix-early-framebuffer-problems,-or-can-i-type-my-disk-password-yet.html">How to fix early framebuffer problems, or "Can I type my disk password yet??"</a></h1>
 <p>
 Most of my workstations &amp; laptops require a passphrase typed in to
@@ -293,68 +293,7 @@ Thanks to <a href="https://askubuntu.com/questions/727577/how-to-check-if-frameb
 
 
 </div>
-</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-gentoo.html">gentoo</a> <a href="tag-linux.html">linux</a> <a href="tag-computing.html">computing</a> </div>
-<div class="post-date">28 Jul 2019</div><h1 class="post-title"><a href="2019-07-28-open-url-in-existing-qutebrowser-from-emacs-daemon-on-gentoo.html">Open URL in existing Qutebrowser from Emacs Daemon on Gentoo</a></h1>
-<p>
-On my Gentoo desktops, I use Emacs Daemon via <code>sys-emacs/emacs-daemon</code><sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
-to ensure an Emacs instance is ready to go and always available from
-boot. This is done via creating a symbolic link like
-<code>/etc/init.d/emacs.winston</code> to <code>/etc/init.d/emacs</code> which will start Emacs
-for the given user. See the package README for more details.
-</p>
-
-<p>
-A shortcoming of this setup is <code>XDG_RUNTIME_DIR</code><sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> is not set, as this is
-set by my Desktop Session - maybe LightDM or consolekit set this? As a
-result, when I open a URL from Emacs Daemon, it opens a fresh
-qutebrowser session, loading the saved default session, and making a
-mess of my workflow.
-</p>
-
-<p>
-One approach to fix this might be to instead run Emacs daemon from my
-<code>.xsession</code> script, but I rather not supervise daemons at the user
-level; if I were to consider this, I'd be better off to switch to
-systemd for user-level services anyway.
-</p>
-
-<p>
-The solution I came up with is to add some lines to my <code>init.el</code> to
-ensure <code>XDG_RUNTIME_DIR</code> is set to the expected value:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-emacs-lisp">(<span style="color: #4c83ff;">defun</span> <span style="color: #ff1493;">winny/ensure-XDG_RUNTIME_DIR</span> ()
-  <span style="color: #FBDE2D;">"Ensure XDG_RUNTIME_DIR is set. Used by qutebrowser and other utilities."</span>
-  (<span style="color: #4c83ff;">let</span> ((rd (getenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span>)))
-    (<span style="color: #4c83ff;">when</span> (<span style="color: #4c83ff;">or</span> (not rd) (string-empty-p rd))
-      (setenv <span style="color: #61CE3C;">"XDG_RUNTIME_DIR"</span> (format <span style="color: #61CE3C;">"/run/user/%d"</span> (user-uid))))))
-
-(add-hook 'after-init-hook #'winny/ensure-XDG_RUNTIME_DIR)
-</pre>
-</div>
-
-<p>
-A strange emacs-ism: <code>(user-uid)</code> returns float or integer, despite the
-backing <code>uid_t</code> (on *nix) is guarenteed to be an integer type. I'll just
-assume this'll never return a float. Please contact me otherwise, I'd
-love to hear about this.
-</p>
-<div id="footnotes">
-<h2 class="footnotes">Footnotes: </h2>
-<div id="text-footnotes">
-
-<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
-<a href="https://packages.gentoo.org/packages/app-emacs/emacs-daemon">https://packages.gentoo.org/packages/app-emacs/emacs-daemon</a>
-</p></div></div>
-
-<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
-<a href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">freedesktop.org XDG Base Directory Specification</a>
-</p></div></div>
-
-
-</div>
-</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-emacs.html">emacs</a> <a href="tag-productivity.html">productivity</a> <a href="tag-computing.html">computing</a> <a href="tag-gentoo.html">gentoo</a> <a href="tag-qutebrowser.html">qutebrowser</a> </div><div id="archive">
+</div><div class="taglist"><a href="tags.html">Tags</a>: <a href="tag-gentoo.html">gentoo</a> <a href="tag-linux.html">linux</a> <a href="tag-computing.html">computing</a> </div><div id="archive">
 <a href="archive.html">Other posts</a>
 </div>
 </div>
