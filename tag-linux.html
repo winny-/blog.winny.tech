@@ -8,7 +8,7 @@
       title="RSS feed for https://blog.winny.tech/"/>
 <title>blog.winny.tech</title>
 
-<link href="static/style.css?v=1.6" rel="stylesheet" type="text/css" />
+<link href="static/style.css?v=1.7" rel="stylesheet" type="text/css" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -65,9 +65,9 @@ question can be easily generalized to any framebuffer driver, as the
 steps are more-or-less the same.
 </p>
 
-<div id="outline-container-org27573a4" class="outline-2">
-<h2 id="org27573a4">Zeroth step: Do you need only a driver, or a driver with firmware?</h2>
-<div class="outline-text-2" id="text-org27573a4">
+<div id="outline-container-org60590c1" class="outline-2">
+<h2 id="org60590c1">Zeroth step: Do you need only a driver, or a driver with firmware?</h2>
+<div class="outline-text-2" id="text-org60590c1">
 <p>
 IT is a good idea to verify if your kernel is missing a driver at
 boot, or is missing firmware or both. Boot up a Live USB with good
@@ -135,9 +135,9 @@ kernel was kind enough to tell me.
 </div>
 </div>
 
-<div id="outline-container-org014237d" class="outline-2">
-<h2 id="org014237d">First step: Obtain the firmware</h2>
-<div class="outline-text-2" id="text-org014237d">
+<div id="outline-container-org47d680f" class="outline-2">
+<h2 id="org47d680f">First step: Obtain the firmware</h2>
+<div class="outline-text-2" id="text-org47d680f">
 <p>
 On Gentoo install
 <code>sys-kernel/linux-firmware</code>. You will have to agree to some non-free
@@ -150,9 +150,9 @@ YMMV.)
 </div>
 </div>
 
-<div id="outline-container-orgbf99349" class="outline-2">
-<h2 id="orgbf99349">Second step, Option A: Compile firmware into your kernel</h2>
-<div class="outline-text-2" id="text-orgbf99349">
+<div id="outline-container-org2133291" class="outline-2">
+<h2 id="org2133291">Second step, Option A: Compile firmware into your kernel</h2>
+<div class="outline-text-2" id="text-org2133291">
 <p>
 Since most of my systems run Gentoo, it is business as usual to
 deploy a kernel with most excess drivers disabled except for common
@@ -212,9 +212,9 @@ pre-mounted-root framebuffer on this device.
 </div>
 </div>
 
-<div id="outline-container-org156bb34" class="outline-2">
-<h2 id="org156bb34">Second step, Option B: A portable kernel approach (using <code>sys-kernel/vanilla-kernel</code>)</h2>
-<div class="outline-text-2" id="text-org156bb34">
+<div id="outline-container-orgccaf77f" class="outline-2">
+<h2 id="orgccaf77f">Second step, Option B: A portable kernel approach (using <code>sys-kernel/vanilla-kernel</code>)</h2>
+<div class="outline-text-2" id="text-orgccaf77f">
 <p>
 I discovered the Gentoo devs <a href="https://blogs.gentoo.org/mgorny/2019/12/19/a-distribution-kernel-for-gentoo/">have begun shipping an ebuild that
 builds and installs a kernel with a portable, livecd friendly
@@ -255,9 +255,9 @@ my case I let portage do the work:
 </div>
 </div>
 
-<div id="outline-container-org8e61f92" class="outline-2">
-<h2 id="org8e61f92">Conclusion</h2>
-<div class="outline-text-2" id="text-org8e61f92">
+<div id="outline-container-org89b02d2" class="outline-2">
+<h2 id="org89b02d2">Conclusion</h2>
+<div class="outline-text-2" id="text-org89b02d2">
 <p>
 Check dmesg. Always check dmesg. We found two ways to deploy
 firmware, in-kernel and in-initrd. The in-kernel technique is best

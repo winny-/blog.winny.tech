@@ -4,7 +4,7 @@
 <title><![CDATA[blog.winny.tech]]></title>
 <description><![CDATA[blog.winny.tech]]></description>
 <link>https://blog.winny.tech/</link>
-<lastBuildDate>Wed, 25 Dec 2019 05:36:32 -0600</lastBuildDate>
+<lastBuildDate>Fri, 03 Jan 2020 22:08:42 -0600</lastBuildDate>
 <item>
   <title><![CDATA[How to fix early framebuffer problems, or "Can I type my disk password yet??"]]></title>
   <description><![CDATA[
@@ -40,9 +40,9 @@ question can be easily generalized to any framebuffer driver, as the
 steps are more-or-less the same.
 </p>
 
-<div id="outline-container-org27573a4" class="outline-2">
-<h2 id="org27573a4">Zeroth step: Do you need only a driver, or a driver with firmware?</h2>
-<div class="outline-text-2" id="text-org27573a4">
+<div id="outline-container-org60590c1" class="outline-2">
+<h2 id="org60590c1">Zeroth step: Do you need only a driver, or a driver with firmware?</h2>
+<div class="outline-text-2" id="text-org60590c1">
 <p>
 IT is a good idea to verify if your kernel is missing a driver at
 boot, or is missing firmware or both. Boot up a Live USB with good
@@ -110,9 +110,9 @@ kernel was kind enough to tell me.
 </div>
 </div>
 
-<div id="outline-container-org014237d" class="outline-2">
-<h2 id="org014237d">First step: Obtain the firmware</h2>
-<div class="outline-text-2" id="text-org014237d">
+<div id="outline-container-org47d680f" class="outline-2">
+<h2 id="org47d680f">First step: Obtain the firmware</h2>
+<div class="outline-text-2" id="text-org47d680f">
 <p>
 On Gentoo install
 <code>sys-kernel/linux-firmware</code>. You will have to agree to some non-free
@@ -125,9 +125,9 @@ YMMV.)
 </div>
 </div>
 
-<div id="outline-container-orgbf99349" class="outline-2">
-<h2 id="orgbf99349">Second step, Option A: Compile firmware into your kernel</h2>
-<div class="outline-text-2" id="text-orgbf99349">
+<div id="outline-container-org2133291" class="outline-2">
+<h2 id="org2133291">Second step, Option A: Compile firmware into your kernel</h2>
+<div class="outline-text-2" id="text-org2133291">
 <p>
 Since most of my systems run Gentoo, it is business as usual to
 deploy a kernel with most excess drivers disabled except for common
@@ -187,9 +187,9 @@ pre-mounted-root framebuffer on this device.
 </div>
 </div>
 
-<div id="outline-container-org156bb34" class="outline-2">
-<h2 id="org156bb34">Second step, Option B: A portable kernel approach (using <code>sys-kernel/vanilla-kernel</code>)</h2>
-<div class="outline-text-2" id="text-org156bb34">
+<div id="outline-container-orgccaf77f" class="outline-2">
+<h2 id="orgccaf77f">Second step, Option B: A portable kernel approach (using <code>sys-kernel/vanilla-kernel</code>)</h2>
+<div class="outline-text-2" id="text-orgccaf77f">
 <p>
 I discovered the Gentoo devs <a href="https://blogs.gentoo.org/mgorny/2019/12/19/a-distribution-kernel-for-gentoo/">have begun shipping an ebuild that
 builds and installs a kernel with a portable, livecd friendly
@@ -230,9 +230,9 @@ my case I let portage do the work:
 </div>
 </div>
 
-<div id="outline-container-org8e61f92" class="outline-2">
-<h2 id="org8e61f92">Conclusion</h2>
-<div class="outline-text-2" id="text-org8e61f92">
+<div id="outline-container-org89b02d2" class="outline-2">
+<h2 id="org89b02d2">Conclusion</h2>
+<div class="outline-text-2" id="text-org89b02d2">
 <p>
 Check dmesg. Always check dmesg. We found two ways to deploy
 firmware, in-kernel and in-initrd. The in-kernel technique is best
@@ -284,9 +284,9 @@ Camp</a> and was pleased with the content. There was plenty of food,
 coffee, and give-aways.
 </p>
 
-<div id="outline-container-orgc09d839" class="outline-2">
-<h2 id="orgc09d839">The Talks</h2>
-<div class="outline-text-2" id="text-orgc09d839">
+<div id="outline-container-orga8ba07b" class="outline-2">
+<h2 id="orga8ba07b">The Talks</h2>
+<div class="outline-text-2" id="text-orga8ba07b">
 <p>
 I attended five talks:
 </p>
@@ -337,9 +337,9 @@ there is hope for the web ecosystem yet.
 </div>
 </div>
 
-<div id="outline-container-org9e96a8a" class="outline-2">
-<h2 id="org9e96a8a">The Food</h2>
-<div class="outline-text-2" id="text-org9e96a8a">
+<div id="outline-container-org79f345b" class="outline-2">
+<h2 id="org79f345b">The Food</h2>
+<div class="outline-text-2" id="text-org79f345b">
 <p>
 Sweet pastries, water, soda, coffee were available in the
 morning ad throughout the day. There may have been more
@@ -350,9 +350,9 @@ shortage of pizza. The coffee was catered from Panera Bread.
 </div>
 </div>
 
-<div id="outline-container-orgbdc4483" class="outline-2">
-<h2 id="orgbdc4483">Conclusion</h2>
-<div class="outline-text-2" id="text-orgbdc4483">
+<div id="outline-container-orgffcdc5f" class="outline-2">
+<h2 id="orgffcdc5f">Conclusion</h2>
+<div class="outline-text-2" id="text-orgffcdc5f">
 <p>
 In addition to learning about Terraform, Kubernetes, and
 accessibility, I met a lot of cool people. I think this event was an
@@ -407,9 +407,9 @@ folded onto itself, held together with adhesive tape. The assembled
 device was remarkably robust and easy to operate.
 </p>
 
-<div id="outline-container-org15ca80f" class="outline-2">
-<h2 id="org15ca80f">Challenges</h2>
-<div class="outline-text-2" id="text-org15ca80f">
+<div id="outline-container-org1bb9d1d" class="outline-2">
+<h2 id="org1bb9d1d">Challenges</h2>
+<div class="outline-text-2" id="text-org1bb9d1d">
 <p>
 We were among the first group to finish building the kit. It turned
 out the software on the included SD card was not exactly what we
@@ -493,9 +493,9 @@ word hunt!
 </div>
 </div>
 
-<div id="outline-container-orgb1af17d" class="outline-2">
-<h2 id="orgb1af17d">Completion</h2>
-<div class="outline-text-2" id="text-orgb1af17d">
+<div id="outline-container-org3800e07" class="outline-2">
+<h2 id="org3800e07">Completion</h2>
+<div class="outline-text-2" id="text-org3800e07">
 <p>
 While our PoC was not deployed in time for presentations, we were
 about five to ten minutes away from setting it up, and demoing
@@ -525,9 +525,9 @@ firmware on it, for example.
 </div>
 </div>
 
-<div id="outline-container-org1ba0a7b" class="outline-2">
-<h2 id="org1ba0a7b">Conclusion</h2>
-<div class="outline-text-2" id="text-org1ba0a7b">
+<div id="outline-container-org38ca3b4" class="outline-2">
+<h2 id="org38ca3b4">Conclusion</h2>
+<div class="outline-text-2" id="text-org38ca3b4">
 <p>
 Our issue in seeking out a usable networking topology had be thinking:
 if I simply had a device with two wifi radios, I could run one as an
@@ -598,9 +598,9 @@ hours, and I learned a lot about team dynamics. We formed a team of eight
 participants. We encountered a couple significant challenges.
 </p>
 
-<div id="outline-container-org25e4843" class="outline-2">
-<h2 id="org25e4843">The stack matters</h2>
-<div class="outline-text-2" id="text-org25e4843">
+<div id="outline-container-orga29e78d" class="outline-2">
+<h2 id="orga29e78d">The stack matters</h2>
+<div class="outline-text-2" id="text-orga29e78d">
 <p>
 Initially we decided to use Python and the <a href="https://www.djangoproject.com/">Django framework</a>. This
 turned out to be a grave error, because picking up Django quickly
@@ -655,9 +655,9 @@ project with classmates.
 </div>
 </div>
 
-<div id="outline-container-orga68c50a" class="outline-2">
-<h2 id="orga68c50a">Debian surprised me (again)</h2>
-<div class="outline-text-2" id="text-orga68c50a">
+<div id="outline-container-orge379750" class="outline-2">
+<h2 id="orge379750">Debian surprised me (again)</h2>
+<div class="outline-text-2" id="text-orge379750">
 <p>
 A funny experience during the hackathon was discovering a rather
 surprising patch Debian's virtualenv package ships. On CentOS 7,
@@ -671,9 +671,9 @@ installing <code>python2</code></a> in the virtual environment. One must pass <c
 </div>
 
 
-<div id="outline-container-org5c2a0e6" class="outline-2">
-<h2 id="org5c2a0e6">Demos never work</h2>
-<div class="outline-text-2" id="text-org5c2a0e6">
+<div id="outline-container-org3f71200" class="outline-2">
+<h2 id="org3f71200">Demos never work</h2>
+<div class="outline-text-2" id="text-org3f71200">
 <p>
 We almost had a working demo, but the part that got us was
 deployment. I spun up a <a href="https://www.vultr.com/">Vultr</a> VPS, installed npm, node, caddy,
@@ -692,9 +692,9 @@ containerized workflows; this would have been a non-issue. Drop in a
 </div>
 </div>
 
-<div id="outline-container-org38584b7" class="outline-2">
-<h2 id="org38584b7">Teamwork is essential</h2>
-<div class="outline-text-2" id="text-org38584b7">
+<div id="outline-container-org7a40dbd" class="outline-2">
+<h2 id="org7a40dbd">Teamwork is essential</h2>
+<div class="outline-text-2" id="text-org7a40dbd">
 <p>
 We had a team of eight members, and it was challenging to find
 tasks for everybody. Given we had two major components &#x2014; frontend
@@ -721,9 +721,9 @@ games, or simply taking a break. Make sure to smile.
 </div>
 </div>
 
-<div id="outline-container-org5e234df" class="outline-2">
-<h2 id="org5e234df">Conclusion</h2>
-<div class="outline-text-2" id="text-org5e234df">
+<div id="outline-container-orgc2b7a72" class="outline-2">
+<h2 id="orgc2b7a72">Conclusion</h2>
+<div class="outline-text-2" id="text-orgc2b7a72">
 <p>
 I had fun at GDG Milwaukee DevFest. Good food, good company. We
 found our initial choice of Django was not productive in true
@@ -759,9 +759,9 @@ operation. Unfortunately this meant I could not do one of the simplest
 operations in Emacs - visiting files and directories.
 </p>
 
-<div id="outline-container-org59c87e8" class="outline-2">
-<h2 id="org59c87e8">Enter <code>debug-on-quit</code></h2>
-<div class="outline-text-2" id="text-org59c87e8">
+<div id="outline-container-orgc18e260" class="outline-2">
+<h2 id="orgc18e260">Enter <code>debug-on-quit</code></h2>
+<div class="outline-text-2" id="text-orgc18e260">
 <p>
 After some searching <a href="https://www.gnu.org/software/emacs/manual/html_node/eintr/Debugging.html#Debugging">I found</a> the <code>debug-on-quit</code> and <code>debug-on-error</code>
 variables<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>, with their corresponding commands <code>toggle-debug-on-quit</code>
@@ -807,9 +807,9 @@ documented somewhere now.
 </div>
 </div>
 
-<div id="outline-container-org7a3db0f" class="outline-2">
-<h2 id="org7a3db0f">Don't forget about <code>debug-on-error</code></h2>
-<div class="outline-text-2" id="text-org7a3db0f">
+<div id="outline-container-org0954e5e" class="outline-2">
+<h2 id="org0954e5e">Don't forget about <code>debug-on-error</code></h2>
+<div class="outline-text-2" id="text-org0954e5e">
 <p>
 <code>debug-on-error</code> is also extremely useful, especially when extending
 Emacs with your own Elisp code. When I write Elisp, I almost always
@@ -916,9 +916,9 @@ Regardless, I have yet to heed my own warning. Maybe I should just use
 programs I want to launch from rofi. Someday :)
 </p>
 
-<div id="outline-container-orgd92b955" class="outline-2">
-<h2 id="orgd92b955">About Unison</h2>
-<div class="outline-text-2" id="text-orgd92b955">
+<div id="outline-container-org97543e9" class="outline-2">
+<h2 id="org97543e9">About Unison</h2>
+<div class="outline-text-2" id="text-org97543e9">
 <p>
 I should mention unison is a superb tool for synchronizing your
 data. It shows the user a list of changes to each directory being
@@ -1128,9 +1128,9 @@ Note: I did not explore some of Blink's features such as using it a
 local iOS shell or settings synchronization. YMMV.
 </p>
 
-<div id="outline-container-org7dcc60c" class="outline-2">
-<h2 id="org7dcc60c">Getting started</h2>
-<div class="outline-text-2" id="text-org7dcc60c">
+<div id="outline-container-orgfe13a22" class="outline-2">
+<h2 id="orgfe13a22">Getting started</h2>
+<div class="outline-text-2" id="text-orgfe13a22">
 <p>
 Here are the steps I used to get started with Blink, as it was
 relatively unclear where to find documentation and which settings
@@ -1289,9 +1289,9 @@ for C!<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
   <title><![CDATA[Publishing with org-static-blog]]></title>
   <description><![CDATA[
 
-<div id="outline-container-orgdbea66b" class="outline-2">
-<h2 id="orgdbea66b">Criteria</h2>
-<div class="outline-text-2" id="text-orgdbea66b">
+<div id="outline-container-org8bd1aad" class="outline-2">
+<h2 id="org8bd1aad">Criteria</h2>
+<div class="outline-text-2" id="text-org8bd1aad">
 <p>
 After reviewing a list of org-mode<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> capable static website generators<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>,
 I decided to see if org-static-blog<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> could suffice my simple
@@ -1312,9 +1312,9 @@ achieve a minimum viable web-page for this project.
 </div>
 </div>
 
-<div id="outline-container-orgec6c80e" class="outline-2">
-<h2 id="orgec6c80e">Configuration of <code>org-static-blog</code></h2>
-<div class="outline-text-2" id="text-orgec6c80e">
+<div id="outline-container-orgdcb799b" class="outline-2">
+<h2 id="orgdcb799b">Configuration of <code>org-static-blog</code></h2>
+<div class="outline-text-2" id="text-orgdcb799b">
 <p>
 Following the org-static-blog README documentation, it is very
 straight forward to get a minimal viable website generated. I added
@@ -1355,9 +1355,9 @@ be necessary to generate a simple site like this one.
 </div>
 </div>
 
-<div id="outline-container-org5ce2cdf" class="outline-2">
-<h2 id="org5ce2cdf">Deploying with Caddy and GitHub</h2>
-<div class="outline-text-2" id="text-org5ce2cdf">
+<div id="outline-container-org61826ef" class="outline-2">
+<h2 id="org61826ef">Deploying with Caddy and GitHub</h2>
+<div class="outline-text-2" id="text-org61826ef">
 <p>
 I am a fan of the Caddy<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup> web server which offers automatic HTTPS
 via LetsEncrypt with only a few lines of configuration. In addition
@@ -1381,9 +1381,9 @@ fired, the website is now deployed.
 </p>
 </div>
 
-<div id="outline-container-org9d52784" class="outline-3">
-<h3 id="org9d52784">Server Configuration</h3>
-<div class="outline-text-3" id="text-org9d52784">
+<div id="outline-container-org6f48f40" class="outline-3">
+<h3 id="org6f48f40">Server Configuration</h3>
+<div class="outline-text-3" id="text-org6f48f40">
 <p>
 I switched most of my personal internet-related services to Docker<sup><a id="fnr.8" class="footref" href="#fn.8">8</a></sup> in
 conjunction with <code>docker-compose</code><sup><a id="fnr.9" class="footref" href="#fn.9">9</a></sup> last year. The main rationale
@@ -1443,9 +1443,9 @@ configuration first.
 </div>
 </div>
 
-<div id="outline-container-orgd5b6198" class="outline-3">
-<h3 id="orgd5b6198">GitHub Configuration</h3>
-<div class="outline-text-3" id="text-orgd5b6198">
+<div id="outline-container-org62b74f4" class="outline-3">
+<h3 id="org62b74f4">GitHub Configuration</h3>
+<div class="outline-text-3" id="text-org62b74f4">
 <p>
 Simply create the GitHub repository, then add a webhook. It is
 important to note the webhook <i>must</i> send a JSON payload. By default a
@@ -1456,9 +1456,9 @@ payload and will not work.
 </div>
 </div>
 
-<div id="outline-container-org7bfe478" class="outline-2">
-<h2 id="org7bfe478">Conclusion</h2>
-<div class="outline-text-2" id="text-org7bfe478">
+<div id="outline-container-orgcd480aa" class="outline-2">
+<h2 id="orgcd480aa">Conclusion</h2>
+<div class="outline-text-2" id="text-orgcd480aa">
 <p>
 With this simple setup I can write posts. I can easily move the
 configuration to a new host at will. In addition my setup does not
